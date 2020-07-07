@@ -192,7 +192,7 @@ class Effect extends glEffectBase {
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(1, 2)
+        Maf.randomInRange(1, 10)
       );
       // color.g = color.b = 0;
       const mat = new RawShaderMaterial({
@@ -201,7 +201,7 @@ class Effect extends glEffectBase {
         fragmentShader: neonFs,
       });
       const h = Maf.randomInRange(0.1, 10);
-      const s = Maf.randomInRange(0.01, 2);
+      const s = Maf.randomInRange(0.01, 0.1);
       const geo = new BoxBufferGeometry(s, s, h);
       const mesh = new Mesh(geo, mat);
       const a = Maf.randomInRange(0, Maf.TAU);
@@ -216,12 +216,12 @@ class Effect extends glEffectBase {
     this.scene.add(this.ring1);
 
     this.ring2 = new Group();
-    for (let j = 0; j < 20; j++) {
+    for (let j = 0; j < 2; j++) {
       const color = new Vector4(
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(1, 2)
+        Maf.randomInRange(1, 10)
       );
       // color.g = color.b = 0;
       const mat = new RawShaderMaterial({
@@ -260,6 +260,8 @@ class Effect extends glEffectBase {
         textureMap: { value: diffuse },
         normalMap: { value: normal },
         specularMap: { value: specular },
+        exposure: { value: 1 },
+        roughness: { value: 1 },
       },
       vertexShader: geoVs,
       fragmentShader: geoFs,
@@ -301,7 +303,7 @@ class Effect extends glEffectBase {
 
   render(t) {
     const speed = 10;
-    const spread = 500;
+    const spread = 100;
     for (const m of this.ring1.children) {
       m.position.z =
         ((m.userData.offset * spread + speed * m.userData.factor * t) %

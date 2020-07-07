@@ -16,6 +16,9 @@ uniform vec3 cameraPosition;
 
 uniform samplerCube envMap;
 
+uniform float exposure;
+uniform float roughness;
+
 varying vec3 vNormal;
 varying vec3 vONormal;
 varying vec4 vPosition;
@@ -83,7 +86,7 @@ void main() {
                           spec3 * blend_weights.zzzz; 
 
   float stripe = smoothstep(.45,.55, .5 + .5 *sin(100.*v_position.y));
-  //blended_specular *= .5 + .5 * stripe;
+  blended_specular *= .5 + .5 * stripe;
 
   vec3 blended_bump = bump1 * blend_weights.xxx +  
                       bump2 * blend_weights.yyy +  
@@ -122,12 +125,9 @@ void main() {
 
   mat3 tbn = cotangent_frame(v_worldPosition, v_worldNormal, v_worldPosition.xy);
 
-  float exposure = .5;
-
   vec3 dNormal = .1*finalNormal;//.1 * normalTex;
   vec3 fn = normalize(v_worldNormal +.1 * tbn*normalTex);
   vec4 refDiff = vec4(0.);
-  float roughness = 2.;
   refDiff += 1.* textureCubeLodEXT(envMap, fn, roughness * 4.);
   gl_FragColor += refDiff * exposure;
   
@@ -135,7 +135,6 @@ void main() {
   vec3 worldNormal = fn;//normalize(v_worldNormal + dNormal);
   vec3 eyeToSurfaceDir = normalize(v_worldPosition - cameraPosition);
   fn = reflect(eyeToSurfaceDir,worldNormal);
-  roughness = 2.;
   refSpec += .9 * textureCubeLodEXT(envMap, fn, roughness * 4.);
   refSpec += .6*  textureCubeLodEXT(envMap, fn, roughness * 2.);
   refSpec += .3*  textureCubeLodEXT(envMap, fn, roughness * 1.);

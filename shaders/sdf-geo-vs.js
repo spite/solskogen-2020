@@ -275,12 +275,12 @@ float map (vec3 p, float t) {
   //float d = displacement(pp);
   //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
   float icosa = fIcosahedron(pp, 1., 50.);
-  return icosa;
+  //return icosa;
   float dodeca = fDodecahedron(pp, 1., 50.);
   //return dodeca;
   //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
   float octa = sdOctahedron(pp, 1.25) - .1;
-  return octa;
+  //return octa;
   float sphere = sdSphere(p, 1.);
   //return sphere;
   //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
