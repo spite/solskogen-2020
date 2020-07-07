@@ -119,7 +119,7 @@ class Effect extends glEffectBase {
       const geo = new BoxBufferGeometry(s, s, h);
       const mesh = new Mesh(geo, mat);
       const a = Maf.randomInRange(0, Maf.TAU);
-      const r = 4;
+      const r = Maf.randomInRange(2, 8);
       mesh.position.x = r * Math.cos(a);
       mesh.position.y = r * Math.sin(a);
       mesh.position.z = Maf.randomInRange(-50, 50);
@@ -140,7 +140,7 @@ class Effect extends glEffectBase {
       const mat = new MeshBasicMaterial({ color });
       const r = Maf.randomInRange(10, 20);
       const r2 = Maf.randomInRange(0.01, 2);
-      const geo = new TorusBufferGeometry(r, r2, 3, 36);
+      const geo = new TorusBufferGeometry(r, r2, 3, 72);
       const mesh = new Mesh(geo, mat);
       mesh.position.x = 0;
       mesh.position.y = 0;
@@ -220,7 +220,7 @@ class Effect extends glEffectBase {
     this.mesh.visible = true;
 
     this.mesh.rotation.x = t;
-    this.mesh.rotation.y = 0.1 * t;
+    this.mesh.rotation.y = 0.8 * t;
     this.renderer.setRenderTarget(this.fbo);
     this.renderer.render(this.scene, this.camera);
     this.renderer.setRenderTarget(null);

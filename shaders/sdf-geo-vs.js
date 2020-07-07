@@ -22,6 +22,7 @@ varying vec3 vEye;
 
 varying vec3 v_worldPosition;
 varying vec3 v_worldNormal;
+varying vec3 v_position;
 
 mat3 rotate_x (float fi) {
 	float cfi = cos (fi);
@@ -274,18 +275,19 @@ float map (vec3 p, float t) {
   //float d = displacement(pp);
   //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
   float icosa = fIcosahedron(pp, 1., 50.);
-  return icosa;
+  //return icosa;
   float dodeca = fDodecahedron(pp, 1., 50.);
-  return dodeca;
+  //return dodeca;
   //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
   float octa = sdOctahedron(pp, 1.25) - .1;
   float sphere = sdSphere(p, 1.);
   //return sphere;
   //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
-  //float tetra = sdTetrahedron(p, 1.) - .1;
+  float tetra = sdTetrahedron(p, 1.) - .1;
+  //return tetra;
   return  opSmoothUnion(icosa, dodeca, .05);
   //return opSmoothIntersection(dodeca, icosa, .5);
-  //return sdPyramid(pp, 1., .75) - .1;
+  return sdPyramid(pp, 1., .75) - .1;
 }
 
 vec3 calcNormal (vec3 p, float t) {
@@ -336,6 +338,7 @@ void main () {
 
   v_worldPosition = (modelMatrix * vec4(p,1.)).xyz;
   v_worldNormal = mat3(modelMatrix) * nm;
+  v_position = p;
 }
 `;
 

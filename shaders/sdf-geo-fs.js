@@ -25,6 +25,7 @@ varying vec3 vEye;
 
 varying vec3 v_worldPosition;
 varying vec3 v_worldNormal;
+varying vec3 v_position;
 
 float random(vec3 scale,float seed){return fract(sin(dot(gl_FragCoord.xyz+seed,scale))*43758.5453+seed);}
 
@@ -81,6 +82,9 @@ void main() {
                           spec2 * blend_weights.yyyy +  
                           spec3 * blend_weights.zzzz; 
 
+  float stripe = smoothstep(.45,.55, .5 + .5 *sin(100.*v_position.y));
+  //blended_specular *= .5 + .5 * stripe;
+
   vec3 blended_bump = bump1 * blend_weights.xxx +  
                       bump2 * blend_weights.yyy +  
                       bump3 * blend_weights.zzz;
@@ -101,10 +105,11 @@ void main() {
   mat3 tsb = mat3( normalize( blended_tangent ), normalize( cross( vNormal, blended_tangent ) ), normalize( vNormal ) );
   vec3 finalNormal = tsb * normalTex;
   
-  float rimPower = 1.;
+  float rimPower = 4.;
   float useRim = 1.;
   float f = rimPower * abs( dot( finalNormal, normalize( vEye ) ) );
   f = clamp( 0., 1., useRim * ( 1. - smoothstep( 0.0, 1., f ) ) );
+  blended_specular += f;
 
   blended_color.rgb = pow( blended_color.rgb, vec3( 1. / 2.2 ) );
 
@@ -120,21 +125,24 @@ void main() {
   vec3 dNormal = .1*finalNormal;//.1 * normalTex;
   vec3 fn = normalize(v_worldNormal +.1 * tbn*normalTex);
   vec4 refDiff = vec4(0.);
-  refDiff += 1.* textureCubeLodEXT(envMap, fn, 8.);
+  float roughness = 2.;
+  refDiff += 1.* textureCubeLodEXT(envMap, fn, roughness * 4.);
   gl_FragColor += refDiff;
 
   vec4 refSpec = vec4(0.);
   vec3 worldNormal = fn;//normalize(v_worldNormal + dNormal);
   vec3 eyeToSurfaceDir = normalize(v_worldPosition - cameraPosition);
   fn = reflect(eyeToSurfaceDir,worldNormal);
-  refSpec += .9 * textureCubeLodEXT(envMap, fn, 8.);
-  refSpec += .6*  textureCubeLodEXT(envMap, fn, 4.);
-  refSpec += .3*  textureCubeLodEXT(envMap, fn, 2.);
+  roughness = 2.;
+  refSpec += .9 * textureCubeLodEXT(envMap, fn, roughness * 4.);
+  refSpec += .6*  textureCubeLodEXT(envMap, fn, roughness * 2.);
+  refSpec += .3*  textureCubeLodEXT(envMap, fn, roughness * 1.);
   gl_FragColor += blended_specular * 2.* refSpec;
  // gl_FragColor = vec4(mat3(viewMatrix) * finalNormal,1.);
 //  gl_FragColor = textureCubeLodEXT(envMap, finalNormal);
 
   //gl_FragColor = vec4(tbn * normalTex, 1.);
+  //gl_FragColor = vec4(f, f, f, 1.);
 }`;
 
 export { shader };
