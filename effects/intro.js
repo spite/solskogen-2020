@@ -114,8 +114,8 @@ class Effect extends glEffectBase {
       );
       // color.g = color.b = 0;
       const mat = new MeshBasicMaterial({ color });
-      const h = Maf.randomInRange(1, 2);
-      const s = Maf.randomInRange(0.1, 2);
+      const h = Maf.randomInRange(0.1, 10);
+      const s = Maf.randomInRange(0.01, 2);
       const geo = new BoxBufferGeometry(s, s, h);
       const mesh = new Mesh(geo, mat);
       const a = Maf.randomInRange(0, Maf.TAU);
@@ -124,6 +124,7 @@ class Effect extends glEffectBase {
       mesh.position.y = r * Math.sin(a);
       mesh.position.z = Maf.randomInRange(-50, 50);
       mesh.userData.offset = Maf.randomInRange(0, 1);
+      mesh.userData.factor = Maf.randomInRange(0.5, 1.5);
       this.ring1.add(mesh);
     }
     this.scene.add(this.ring1);
@@ -138,13 +139,14 @@ class Effect extends glEffectBase {
       // color.g = color.b = 0;
       const mat = new MeshBasicMaterial({ color });
       const r = Maf.randomInRange(10, 20);
-      const r2 = Maf.randomInRange(0.1, 2);
+      const r2 = Maf.randomInRange(0.01, 2);
       const geo = new TorusBufferGeometry(r, r2, 3, 36);
       const mesh = new Mesh(geo, mat);
       mesh.position.x = 0;
       mesh.position.y = 0;
       mesh.position.z = Maf.randomInRange(-50, 50);
       mesh.userData.offset = Maf.randomInRange(0, 1);
+      mesh.userData.factor = Maf.randomInRange(0.5, 1.5);
       this.ring2.add(mesh);
     }
     this.scene.add(this.ring2);
@@ -203,11 +205,15 @@ class Effect extends glEffectBase {
     const spread = 500;
     for (const m of this.ring1.children) {
       m.position.z =
-        ((m.userData.offset * spread + speed * t) % spread) - spread / 2;
+        ((m.userData.offset * spread + speed * m.userData.factor * t) %
+          spread) -
+        spread / 2;
     }
     for (const m of this.ring2.children) {
       m.position.z =
-        ((m.userData.offset * spread + speed * t) % spread) - spread / 2;
+        ((m.userData.offset * spread + speed * m.userData.factor * t) %
+          spread) -
+        spread / 2;
     }
     this.mesh.visible = false;
     this.cubeCamera.update(this.renderer, this.scene);
