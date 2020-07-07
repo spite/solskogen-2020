@@ -21,6 +21,8 @@ import {
   WebGLCubeRenderTarget,
   RGBFormat,
   LinearMipmapLinearFilter,
+  TorusBufferGeometry,
+  Color,
 } from "../third_party/three.module.js";
 import { ShaderPass } from "../js/ShaderPass.js";
 import { shader as vertexShader } from "../shaders/ortho-vs.js";
@@ -80,7 +82,7 @@ const scrap = {
   normal: "scrap-normal.png",
   specular: "scrap-specular.png",
 };
-const mat = concrete;
+const mat = scrap;
 
 const loader = new TextureLoader();
 const matCapTex = loader.load("../assets/matcap.jpg");
@@ -104,20 +106,48 @@ class Effect extends glEffectBase {
     super.initialise();
 
     this.ring1 = new Group();
-    const mat = new MeshBasicMaterial({ color: 0xff0000 });
-    for (let j = 0; j < 10; j++) {
-      const h = Maf.randomInRange(10, 20);
-      const s = Maf.randomInRange(0.1, 0.2);
+    for (let j = 0; j < 100; j++) {
+      const color = new Color(
+        Maf.randomInRange(0.5, 1),
+        Maf.randomInRange(0.5, 1),
+        Maf.randomInRange(0.5, 1)
+      );
+      // color.g = color.b = 0;
+      const mat = new MeshBasicMaterial({ color });
+      const h = Maf.randomInRange(1, 2);
+      const s = Maf.randomInRange(0.1, 2);
       const geo = new BoxBufferGeometry(s, s, h);
       const mesh = new Mesh(geo, mat);
       const a = Maf.randomInRange(0, Maf.TAU);
       const r = 4;
       mesh.position.x = r * Math.cos(a);
       mesh.position.y = r * Math.sin(a);
-      mesh.position.z = Maf.randomInRange(-10, 10);
+      mesh.position.z = Maf.randomInRange(-50, 50);
+      mesh.userData.offset = Maf.randomInRange(0, 1);
       this.ring1.add(mesh);
     }
     this.scene.add(this.ring1);
+
+    this.ring2 = new Group();
+    for (let j = 0; j < 20; j++) {
+      const color = new Color(
+        Maf.randomInRange(0.5, 1),
+        Maf.randomInRange(0.5, 1),
+        Maf.randomInRange(0.5, 1)
+      );
+      // color.g = color.b = 0;
+      const mat = new MeshBasicMaterial({ color });
+      const r = Maf.randomInRange(10, 20);
+      const r2 = Maf.randomInRange(0.1, 2);
+      const geo = new TorusBufferGeometry(r, r2, 3, 36);
+      const mesh = new Mesh(geo, mat);
+      mesh.position.x = 0;
+      mesh.position.y = 0;
+      mesh.position.z = Maf.randomInRange(-50, 50);
+      mesh.userData.offset = Maf.randomInRange(0, 1);
+      this.ring2.add(mesh);
+    }
+    this.scene.add(this.ring2);
 
     this.cubeRenderTarget = new WebGLCubeRenderTarget(1024, {
       format: RGBFormat,
@@ -169,11 +199,22 @@ class Effect extends glEffectBase {
   }
 
   render(t) {
+    const speed = 10;
+    const spread = 500;
+    for (const m of this.ring1.children) {
+      m.position.z =
+        ((m.userData.offset * spread + speed * t) % spread) - spread / 2;
+    }
+    for (const m of this.ring2.children) {
+      m.position.z =
+        ((m.userData.offset * spread + speed * t) % spread) - spread / 2;
+    }
     this.mesh.visible = false;
     this.cubeCamera.update(this.renderer, this.scene);
     this.mesh.visible = true;
 
-    this.mesh.rotation.y = t;
+    this.mesh.rotation.x = t;
+    this.mesh.rotation.y = 0.1 * t;
     this.renderer.setRenderTarget(this.fbo);
     this.renderer.render(this.scene, this.camera);
     this.renderer.setRenderTarget(null);

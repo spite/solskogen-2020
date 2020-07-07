@@ -3,9 +3,14 @@ import { OrbitControls } from "./third_party/OrbitControls.js";
 import { Effect as IntroEffect } from "./effects/intro.js";
 import { Composer } from "./js/Composer.js";
 
-const renderer = new WebGLRenderer({ antialias: true });
+const canvas = document.createElement("canvas");
+document.body.append(canvas);
+const context = canvas.getContext("webgl");
+
+const renderer = new WebGLRenderer({ canvas, context, antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
-document.body.append(renderer.domElement);
+renderer.setClearColor(0, 1);
+renderer.extensions.get("OES_standard_derivatives");
 renderer.extensions.get("EXT_shader_texture_lod");
 
 const composer = new Composer(renderer, 1, 1);
@@ -66,7 +71,7 @@ async function init() {
   loading.style.display = "none";
   start.style.display = "flex";
   console.log("Ready...");
-  run();
+  //run();
 }
 
 function run() {

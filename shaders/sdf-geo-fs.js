@@ -1,5 +1,6 @@
 const shader = glsl`
-//#extension GL_EXT_shader_texture_lod : enable
+#extension GL_EXT_shader_texture_lod : enable
+#extension GL_OES_standard_derivatives : enable
 
 precision highp float;
 
@@ -9,6 +10,9 @@ uniform sampler2D matCapMap;
 uniform sampler2D specularMap;
 
 uniform mat3 normalMatrix;
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
+uniform vec3 cameraPosition;
 
 uniform samplerCube envMap;
 
@@ -19,7 +23,30 @@ varying vec3 vU;
 varying vec3 lDir;
 varying vec3 vEye;
 
+varying vec3 v_worldPosition;
+varying vec3 v_worldNormal;
+
 float random(vec3 scale,float seed){return fract(sin(dot(gl_FragCoord.xyz+seed,scale))*43758.5453+seed);}
+
+mat3 cotangent_frame( vec3 N, vec3 p, vec2 uv )
+{
+    // get edge vectors of the pixel triangle
+    vec3 dp1 = dFdx( p );
+    vec3 dp2 = dFdy( p );
+    vec2 duv1 = dFdx( uv );
+    vec2 duv2 = dFdy( uv );
+
+    // solve the linear system
+    vec3 dp2perp = cross( dp2, N );
+    vec3 dp1perp = cross( N, dp1 );
+    vec3 T = dp2perp * duv1.x + dp1perp * duv2.x;
+    vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;
+
+    // construct a scale-invariant frame 
+    float invmax = inversesqrt( max( dot(T,T), dot(B,B) ) );
+    return mat3( T * invmax, B * invmax, N );
+}
+
 
 void main() {
 
@@ -29,7 +56,7 @@ void main() {
   blend_weights = max( blend_weights, 0. );
   blend_weights /= ( blend_weights.x + blend_weights.y + blend_weights.z );
 
-  vec2 texScale = vec2( 3. );
+  vec2 texScale = vec2(2.);
   vec2 coord1 = vPosition.yz * texScale;
   vec2 coord2 = vPosition.zx * texScale;
   vec2 coord3 = vPosition.xy * texScale;
@@ -58,9 +85,10 @@ void main() {
                       bump2 * blend_weights.yyy +  
                       bump3 * blend_weights.zzz;
 
-  vec3 tanX = vec3(  vNormal.x, -vNormal.z,  vNormal.y );
-  vec3 tanY = vec3(  vNormal.z,  vNormal.y, -vNormal.x );
-  vec3 tanZ = vec3( -vNormal.y,  vNormal.x,  vNormal.z );
+  vec3 tn = v_worldNormal;                   
+  vec3 tanX = vec3(  tn.x, -tn.z,  tn.y );
+  vec3 tanY = vec3(  tn.z,  tn.y, -tn.x );
+  vec3 tanZ = vec3( -tn.y,  tn.x,  tn.z );
   vec3 blended_tangent = tanX * blend_weights.xxx +  
                          tanY * blend_weights.yyy +  
                          tanZ * blend_weights.zzz; 
@@ -69,13 +97,10 @@ void main() {
   vec3 normalTex = blended_bump * 2.0 - 1.0;
   normalTex.xy *= normalScale;
   normalTex = normalize( normalTex );
+ // normalTex = vec3(0.,0.,1.);
   mat3 tsb = mat3( normalize( blended_tangent ), normalize( cross( vNormal, blended_tangent ) ), normalize( vNormal ) );
   vec3 finalNormal = tsb * normalTex;
-
-  vec3 r = reflect( normalize( vU ), normalize( finalNormal ) );
-  float m = 2.0 * sqrt( r.x * r.x + r.y * r.y + ( r.z + 1.0 ) * ( r.z + 1.0 ) );
-  vec2 calculatedNormal = vec2( r.x / m + 0.5,  r.y / m + 0.5 );
-
+  
   float rimPower = 1.;
   float useRim = 1.;
   float f = rimPower * abs( dot( finalNormal, normalize( vEye ) ) );
@@ -83,26 +108,33 @@ void main() {
 
   blended_color.rgb = pow( blended_color.rgb, vec3( 1. / 2.2 ) );
 
-  vec4 shading = vec4( texture2D( matCapMap, calculatedNormal ).rgb, 1. );
+  vec4 shading = vec4(0.);//textureCube(envMap, finalNormal);//1.*vec4( texture2D( matCapMap, calculatedNormal ).rgb, 1. );
   vec4 color = mix( blended_color, shading, 1. - blended_specular );
   color = blended_color * 4. * shading + f * ( shading * ( blended_specular ) );
-
-  //float noise = .05;
-  //color.rgb += noise * ( .5 - random( vec3( 1. ), length( gl_FragCoord ) ) );
 
   gl_FragColor = color;
   gl_FragColor.a = 1.;
 
-  //gl_FragColor.rgb = shading.rgb;
-  //gl_FragColor.a = opacity * ( 1. - f );
+  mat3 tbn = cotangent_frame(v_worldPosition, v_worldNormal, v_worldPosition.xy);
 
-  /*vec2 blended_coord = coord1 * blend_weights.xx +
-                       coord2 * blend_weights.yy +
-                       coord3 * blend_weights.zz;
+  vec3 dNormal = .1*finalNormal;//.1 * normalTex;
+  vec3 fn = normalize(v_worldNormal +.1 * tbn*normalTex);
+  vec4 refDiff = vec4(0.);
+  refDiff += 1.* textureCubeLodEXT(envMap, fn, 8.);
+  gl_FragColor += refDiff;
 
-  gl_FragColor = vec4( texture2D( textureMap, blended_coord ).rgb, 1. );*/
-  
-  gl_FragColor += textureCube(envMap, normalMatrix * finalNormal);
+  vec4 refSpec = vec4(0.);
+  vec3 worldNormal = fn;//normalize(v_worldNormal + dNormal);
+  vec3 eyeToSurfaceDir = normalize(v_worldPosition - cameraPosition);
+  fn = reflect(eyeToSurfaceDir,worldNormal);
+  refSpec += .9 * textureCubeLodEXT(envMap, fn, 8.);
+  refSpec += .6*  textureCubeLodEXT(envMap, fn, 4.);
+  refSpec += .3*  textureCubeLodEXT(envMap, fn, 2.);
+  gl_FragColor += blended_specular * 2.* refSpec;
+ // gl_FragColor = vec4(mat3(viewMatrix) * finalNormal,1.);
+//  gl_FragColor = textureCubeLodEXT(envMap, finalNormal);
+
+  //gl_FragColor = vec4(tbn * normalTex, 1.);
 }`;
 
 export { shader };

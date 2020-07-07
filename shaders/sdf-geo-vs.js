@@ -20,6 +20,9 @@ varying vec3 vU;
 varying vec3 lDir;
 varying vec3 vEye;
 
+varying vec3 v_worldPosition;
+varying vec3 v_worldNormal;
+
 mat3 rotate_x (float fi) {
 	float cfi = cos (fi);
 	float sfi = sin (fi);
@@ -267,11 +270,13 @@ float fIcosahedron(vec3 p, float r, float e) {
 }
 
 float map (vec3 p, float t) {
-  vec3 pp = opTwist( p );
+  vec3 pp = p;//opTwist( p );
   //float d = displacement(pp);
   //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
   float icosa = fIcosahedron(pp, 1., 50.);
+  return icosa;
   float dodeca = fDodecahedron(pp, 1., 50.);
+  return dodeca;
   //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
   float octa = sdOctahedron(pp, 1.25) - .1;
   float sphere = sdSphere(p, 1.);
@@ -317,11 +322,7 @@ void main () {
   float d = march( ro, rd, 0. );
   vec3 p = ro + d * rd;
   vec3 nm = calcNormal (p, 0.);
-//  vNormal = nm;
-
-//	vec4 mVPosition = modelViewMatrix * vec4( p, 1. );
-//	vec4 mVPosition = modelViewMatrix * vec4( position.xyz, 1. );
-//	gl_Position = projectionMatrix * mVPosition;
+  nm *= -1.;
 
   vPosition = modelViewMatrix * vec4( p, 1.0 );
   gl_Position = projectionMatrix * vPosition;
@@ -331,7 +332,10 @@ void main () {
 
   vEye = ( modelViewMatrix * vec4( p, 1.0 ) ).xyz;
   vNormal = normalMatrix * nm;
-  vONormal = nm;
+  vONormal =  nm;
+
+  v_worldPosition = (modelMatrix * vec4(p,1.)).xyz;
+  v_worldNormal = mat3(modelMatrix) * nm;
 }
 `;
 
