@@ -271,19 +271,20 @@ float fIcosahedron(vec3 p, float r, float e) {
 }
 
 float map (vec3 p, float t) {
-  vec3 pp = p;//opTwist( p );
+  vec3 pp = p;// opTwist( p );
   //float d = displacement(pp);
   //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
   float icosa = fIcosahedron(pp, 1., 50.);
-  //return icosa;
+  return icosa;
   float dodeca = fDodecahedron(pp, 1., 50.);
   //return dodeca;
   //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
   float octa = sdOctahedron(pp, 1.25) - .1;
+  return octa;
   float sphere = sdSphere(p, 1.);
   //return sphere;
   //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
-  float tetra = sdTetrahedron(p, 1.) - .1;
+  float tetra = sdTetrahedron(pp, 1.) - .1;
   //return tetra;
   return  opSmoothUnion(icosa, dodeca, .05);
   //return opSmoothIntersection(dodeca, icosa, .5);

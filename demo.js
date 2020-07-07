@@ -9,7 +9,7 @@ const context = canvas.getContext("webgl");
 
 const renderer = new WebGLRenderer({ canvas, context, antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0, 1);
+renderer.setClearColor(0, 0);
 renderer.extensions.get("OES_standard_derivatives");
 renderer.extensions.get("EXT_shader_texture_lod");
 

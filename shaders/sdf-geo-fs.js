@@ -122,13 +122,15 @@ void main() {
 
   mat3 tbn = cotangent_frame(v_worldPosition, v_worldNormal, v_worldPosition.xy);
 
+  float exposure = .5;
+
   vec3 dNormal = .1*finalNormal;//.1 * normalTex;
   vec3 fn = normalize(v_worldNormal +.1 * tbn*normalTex);
   vec4 refDiff = vec4(0.);
   float roughness = 2.;
   refDiff += 1.* textureCubeLodEXT(envMap, fn, roughness * 4.);
-  gl_FragColor += refDiff;
-
+  gl_FragColor += refDiff * exposure;
+  
   vec4 refSpec = vec4(0.);
   vec3 worldNormal = fn;//normalize(v_worldNormal + dNormal);
   vec3 eyeToSurfaceDir = normalize(v_worldPosition - cameraPosition);
@@ -137,10 +139,10 @@ void main() {
   refSpec += .9 * textureCubeLodEXT(envMap, fn, roughness * 4.);
   refSpec += .6*  textureCubeLodEXT(envMap, fn, roughness * 2.);
   refSpec += .3*  textureCubeLodEXT(envMap, fn, roughness * 1.);
-  gl_FragColor += blended_specular * 2.* refSpec;
+  gl_FragColor += blended_specular * 1.* refSpec * exposure;
+  
  // gl_FragColor = vec4(mat3(viewMatrix) * finalNormal,1.);
 //  gl_FragColor = textureCubeLodEXT(envMap, finalNormal);
-
   //gl_FragColor = vec4(tbn * normalTex, 1.);
   //gl_FragColor = vec4(f, f, f, 1.);
 }`;

@@ -11,6 +11,7 @@ import {
   MeshNormalMaterial,
   RawShaderMaterial,
   Vector3,
+  Vector4,
   MeshBasicMaterial,
   IcosahedronBufferGeometry,
   ClampToEdgeWrapping,
@@ -19,35 +20,97 @@ import {
   Group,
   CubeCamera,
   WebGLCubeRenderTarget,
-  RGBFormat,
+  RGBAFormat,
   LinearMipmapLinearFilter,
   TorusBufferGeometry,
   Color,
+  FloatType,
+  UnsignedByteType,
 } from "../third_party/three.module.js";
 import { ShaderPass } from "../js/ShaderPass.js";
+import { ShaderPingPongPass } from "../js/ShaderPingPongPass.js";
 import { shader as vertexShader } from "../shaders/ortho-vs.js";
 import Maf from "../third_party/maf.js";
 
 import { shader as geoVs } from "../shaders/sdf-geo-vs.js";
 import { shader as geoFs } from "../shaders/sdf-geo-fs.js";
 
+import { shader as neonVs } from "../shaders/neon-vs.js";
+import { shader as neonFs } from "../shaders/neon-fs.js";
+
+import { shader as orthoVs } from "../shaders/ortho-vs.js";
+import { shader as highlightFs } from "../shaders/highlight-fs.js";
+import { shader as blurFs } from "../shaders/blur-fs.js";
+import { screen } from "../shaders/screen.js";
+
+const blurShader = new RawShaderMaterial({
+  uniforms: {
+    inputTexture: { value: null },
+    resolution: { value: new Vector2(1, 1) },
+    direction: { value: new Vector2(0, 1) },
+  },
+  vertexShader: orthoVs,
+  fragmentShader: blurFs,
+});
+
+const highlightShader = new RawShaderMaterial({
+  uniforms: {
+    inputTexture: { value: null },
+    resolution: { value: new Vector2(1, 1) },
+    direction: { value: new Vector2(0, 1) },
+  },
+  vertexShader: orthoVs,
+  fragmentShader: highlightFs,
+});
+
 const fragmentShader = `
 precision highp float;
 
 uniform sampler2D fbo;
 
+uniform sampler2D blur0Tex;
+uniform sampler2D blur1Tex;
+uniform sampler2D blur2Tex;
+uniform sampler2D blur3Tex;
+uniform sampler2D blur4Tex;
+
+uniform float radius;
+uniform float strength;
+
 varying vec2 vUv;
+
+float lerpBloomFactor(float v) {
+  return mix(v, 1.2 - v, radius);
+}
+
+${screen}
 
 void main() {
   vec4 c = texture2D(fbo, vUv);
-  gl_FragColor = c;// vec4(vec3(1.) - c.rgb, c.a);
+  
+  vec4 bloom = vec4(0.);
+  bloom += lerpBloomFactor(1.) * texture2D( blur0Tex, vUv );
+  bloom += lerpBloomFactor(.8) * texture2D( blur1Tex, vUv );
+  bloom += lerpBloomFactor(.6) * texture2D( blur2Tex, vUv );
+  bloom += lerpBloomFactor(.4) * texture2D( blur3Tex, vUv );
+  bloom += lerpBloomFactor(.2) * texture2D( blur4Tex, vUv );
+
+  c += bloom;
+  gl_FragColor = screen(c,bloom,0.);// vec4(vec3(1.) - c.rgb, c.a);
 }
 `;
 
 const shader = new RawShaderMaterial({
   uniforms: {
     fbo: { value: null },
+    blur0Tex: { value: null },
+    blur1Tex: { value: null },
+    blur2Tex: { value: null },
+    blur3Tex: { value: null },
+    blur4Tex: { value: null },
     resolution: { value: new Vector2(1, 1) },
+    radius: { value: 1 },
+    strength: { value: 1 },
   },
   vertexShader,
   fragmentShader,
@@ -99,7 +162,25 @@ class Effect extends glEffectBase {
   constructor(renderer) {
     super(renderer);
     this.post = new ShaderPass(this.renderer, shader);
+    this.highlight = new ShaderPass(this.renderer, highlightShader);
     shader.uniforms.fbo.value = this.fbo.texture;
+    highlightShader.uniforms.inputTexture.value = this.fbo.texture;
+
+    this.blurPasses = [];
+    this.levels = 5;
+
+    for (let i = 0; i < this.levels; i++) {
+      const blurPass = new ShaderPingPongPass(this.renderer, blurShader, {
+        format: RGBAFormat,
+        type: UnsignedByteType,
+      });
+      this.blurPasses.push(blurPass);
+    }
+    shader.uniforms.blur0Tex.value = this.blurPasses[0].fbo.texture;
+    shader.uniforms.blur1Tex.value = this.blurPasses[1].fbo.texture;
+    shader.uniforms.blur2Tex.value = this.blurPasses[2].fbo.texture;
+    shader.uniforms.blur3Tex.value = this.blurPasses[3].fbo.texture;
+    shader.uniforms.blur4Tex.value = this.blurPasses[4].fbo.texture;
   }
 
   async initialise() {
@@ -107,13 +188,18 @@ class Effect extends glEffectBase {
 
     this.ring1 = new Group();
     for (let j = 0; j < 100; j++) {
-      const color = new Color(
+      const color = new Vector4(
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(0.5, 1)
+        Maf.randomInRange(0.5, 1),
+        Maf.randomInRange(1, 2)
       );
       // color.g = color.b = 0;
-      const mat = new MeshBasicMaterial({ color });
+      const mat = new RawShaderMaterial({
+        uniforms: { color: { value: color } },
+        vertexShader: neonVs,
+        fragmentShader: neonFs,
+      });
       const h = Maf.randomInRange(0.1, 10);
       const s = Maf.randomInRange(0.01, 2);
       const geo = new BoxBufferGeometry(s, s, h);
@@ -131,13 +217,18 @@ class Effect extends glEffectBase {
 
     this.ring2 = new Group();
     for (let j = 0; j < 20; j++) {
-      const color = new Color(
+      const color = new Vector4(
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(0.5, 1)
+        Maf.randomInRange(0.5, 1),
+        Maf.randomInRange(1, 2)
       );
       // color.g = color.b = 0;
-      const mat = new MeshBasicMaterial({ color });
+      const mat = new RawShaderMaterial({
+        uniforms: { color: { value: color } },
+        vertexShader: neonVs,
+        fragmentShader: neonFs,
+      });
       const r = Maf.randomInRange(10, 20);
       const r2 = Maf.randomInRange(0.01, 2);
       const geo = new TorusBufferGeometry(r, r2, 3, 72);
@@ -151,8 +242,9 @@ class Effect extends glEffectBase {
     }
     this.scene.add(this.ring2);
 
-    this.cubeRenderTarget = new WebGLCubeRenderTarget(1024, {
-      format: RGBFormat,
+    this.cubeRenderTarget = new WebGLCubeRenderTarget(512, {
+      format: RGBAFormat,
+      type: FloatType,
       generateMipmaps: true,
       minFilter: LinearMipmapLinearFilter,
     });
@@ -165,15 +257,9 @@ class Effect extends glEffectBase {
         time: { value: 0 },
         matCapMap: { value: matCapTex },
         envMap: { value: this.cubeRenderTarget.texture },
-        textureMap: {
-          value: diffuse,
-        },
-        normalMap: {
-          value: normal,
-        },
-        specularMap: {
-          value: specular,
-        },
+        textureMap: { value: diffuse },
+        normalMap: { value: normal },
+        specularMap: { value: specular },
       },
       vertexShader: geoVs,
       fragmentShader: geoFs,
@@ -197,7 +283,20 @@ class Effect extends glEffectBase {
   setSize(w, h) {
     super.setSize(w, h);
     this.post.setSize(w, h);
+    this.highlight.setSize(w, h);
     shader.uniforms.resolution.value.set(w, h);
+    blurShader.uniforms.resolution.value.set(w, h);
+    highlightShader.uniforms.resolution.value.set(w, h);
+
+    let tw = w;
+    let th = h;
+    for (let i = 0; i < this.levels; i++) {
+      tw = Math.round(tw);
+      th = Math.round(th);
+      tw /= 2;
+      th /= 2;
+      this.blurPasses[i].setSize(tw, th);
+    }
   }
 
   render(t) {
@@ -224,6 +323,27 @@ class Effect extends glEffectBase {
     this.renderer.setRenderTarget(this.fbo);
     this.renderer.render(this.scene, this.camera);
     this.renderer.setRenderTarget(null);
+
+    this.highlight.render();
+
+    let offset = 1;
+    blurShader.uniforms.inputTexture.value = this.highlight.fbo.texture;
+    for (let j = 0; j < this.levels; j++) {
+      blurShader.uniforms.direction.value.set(offset, 0);
+      const blurPass = this.blurPasses[j];
+      const w = blurPass.fbo.width;
+      const h = blurPass.fbo.height;
+      blurShader.uniforms.resolution.value.set(w, h);
+      blurPass.render();
+      blurShader.uniforms.inputTexture.value =
+        blurPass.fbos[blurPass.currentFBO];
+      blurShader.uniforms.direction.value.set(0, offset);
+      blurPass.render();
+      blurShader.uniforms.inputTexture.value =
+        blurPass.fbos[blurPass.currentFBO];
+    }
+    //this.post.shader.uniforms.fbo.value = this.highlight.fbo.texture;
+
     this.post.render();
   }
 }
