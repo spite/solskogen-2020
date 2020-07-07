@@ -6,6 +6,7 @@ import { Composer } from "./js/Composer.js";
 const renderer = new WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 document.body.append(renderer.domElement);
+renderer.extensions.get("EXT_shader_texture_lod");
 
 const composer = new Composer(renderer, 1, 1);
 
@@ -47,10 +48,12 @@ const audio = document.createElement("audio");
 audio.src = "./assets/track.mp3";
 audio.preload = true;
 const audioPromise = new Promise((resolve, reject) => {
-  audio.addEventListener("canplaythrough", (e) => {
+  audio.addEventListener("canplay", (e) => {
     resolve();
   });
 });
+
+window.promises = [];
 
 async function init() {
   console.log("Loading...");

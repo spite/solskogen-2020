@@ -1,4 +1,4 @@
-const shader = `
+const shader = glsl`
 #define EPSILON 	0.001
 #define MAXDIST 	100.0
 #define MAXSTEPS	100
@@ -50,6 +50,11 @@ mat3 rotate_z (float fi) {
 	);
 }
 
+float displacement(vec3 p) {
+  float s = 2.;
+  return .5*sin(s*p.x)*sin(s*p.y)*sin(s*p.z);
+}
+
 vec3 opTwist( vec3 p )
 {
     float scale = .5;
@@ -75,6 +80,13 @@ float sdCylinder( vec3 p, vec3 c )
 {
   return length(p.xz-c.xy)-c.z;
 }
+
+float sdCappedCylinder( vec3 p, float h, float r )
+{
+  vec2 d = abs(vec2(length(p.xz),p.y)) - vec2(h,r);
+  return min(max(d.x,d.y),0.0) + length(max(d,0.0));
+}
+
 
 float sdPyramid( in vec3 p, in float bs, in float h )
 {
@@ -255,15 +267,19 @@ float fIcosahedron(vec3 p, float r, float e) {
 }
 
 float map (vec3 p, float t) {
-	vec3 pp = p;//opTwist( p );
+  vec3 pp = opTwist( p );
+  //float d = displacement(pp);
+  //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
   float icosa = fIcosahedron(pp, 1., 50.);
   float dodeca = fDodecahedron(pp, 1., 50.);
-  //return sdOctahedron(p, 1.) - .1;
-  // return sdSphere(p, 2.);
+  //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
+  float octa = sdOctahedron(pp, 1.25) - .1;
+  float sphere = sdSphere(p, 1.);
+  //return sphere;
   //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
-  float tetra = sdTetrahedron(p, 1.) - .1;
-  return opSmoothUnion(dodeca, icosa, .05);
-//  return opSmoothIntersection(dodeca, icosa, .05);
+  //float tetra = sdTetrahedron(p, 1.) - .1;
+  return  opSmoothUnion(icosa, dodeca, .05);
+  //return opSmoothIntersection(dodeca, icosa, .5);
   //return sdPyramid(pp, 1., .75) - .1;
 }
 
