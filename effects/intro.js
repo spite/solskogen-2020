@@ -146,7 +146,7 @@ const scrap = {
   normal: "scrap-normal.png",
   specular: "scrap-specular.png",
 };
-const mat = water; //scrap;
+const mat = water; //concrete; //scrap;
 
 const loader = new TextureLoader();
 const matCapTex = loader.load("../assets/matcap.jpg");
@@ -193,7 +193,7 @@ class Effect extends glEffectBase {
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(1, 10)
+        Maf.randomInRange(1, 4)
       );
       // color.g = color.b = 0;
       const mat = new RawShaderMaterial({
@@ -222,7 +222,7 @@ class Effect extends glEffectBase {
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(1, 10)
+        Maf.randomInRange(1, 4)
       );
       // color.g = color.b = 0;
       const mat = new RawShaderMaterial({
@@ -253,7 +253,7 @@ class Effect extends glEffectBase {
     this.cubeCamera = new CubeCamera(0.1, 20, this.cubeRenderTarget);
     this.scene.add(this.cubeCamera);
 
-    const geoShader = new RawShaderMaterial({
+    this.geoShader = new RawShaderMaterial({
       uniforms: {
         time: { value: 0 },
         matCapMap: { value: matCapTex },
@@ -265,7 +265,7 @@ class Effect extends glEffectBase {
         exposure: { value: 0.5 }, // Exposure of diffuse and specular lighting.
         roughness: { value: 2 }, // Roughness (bias of texture lookup)
         normalScale: { value: 0.5 }, // Normal mapping scale.
-        texScale: { value: 1 }, // Triplanar mapping scale.
+        texScale: { value: 2 }, // Triplanar mapping scale.
         stripeFreq: { value: 10 }, // Vertical frequency of stripes.
         stripeOffset: { value: Math.PI / 2 }, // Radians.
         stripeColor: { value: new Vector4(1, 0, 0, 0) }, // R G B Intensity
@@ -277,7 +277,7 @@ class Effect extends glEffectBase {
     });
 
     const geometry = new IcosahedronBufferGeometry(2, 7);
-    this.mesh = new Mesh(geometry, geoShader);
+    this.mesh = new Mesh(geometry, this.geoShader);
     this.scene.add(this.mesh);
 
     const box = new Mesh(
