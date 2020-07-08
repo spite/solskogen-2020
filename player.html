@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			html {
+				height: 100%;
+			}
+			body {
+				color: white;
+				background-color: #000;
+				height: 100%;
+				margin: 0px;
+			}
+			canvas {
+				display: block;
+			}
+			#info {
+				position: absolute;
+				width: 100%;
+				top: 50%;
+				text-align: center;
+			}
+			#playButton {
+				top: 50%;
+				left: 50%;
+			}
+			#container {
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="info">
+			Blah by blah<br/><br/>
+			<button id="playButton">Loading</button>
+		</div>
+
+		<div id="container"></div>
+
+		<script>
+			function glsl(s) { return s[0]; }
+		</script>
+
+		<script type="module">
+
+			import { Resources, Player, Timeline } from './editor/Frame.js';
+
+			const resources = new Resources();
+			resources.set( 'dom', document.getElementById( 'container' ) );
+
+			const timeline = new Timeline();
+			const player = new Player();
+
+			load( './editor/script.json' );
+
+			//
+
+			const playButton = document.getElementById( 'playButton' );
+
+			async function load( path ) {
+
+				await timeline.load( path );
+				await timeline.compile( resources, player );
+
+				playButton.textContent = 'Play';
+				playButton.addEventListener( 'click', function () {
+
+					info.style.display = 'none';
+
+					player.play();
+
+					prevTime = performance.now();
+
+					window.requestAnimationFrame( animate );
+
+				} );
+
+			}
+
+			let prevTime = 0;
+
+			function animate( time ) {
+
+				player.tick( time - prevTime );
+				timeline.update( player.currentTime );
+
+				prevTime = time;
+
+				window.requestAnimationFrame( animate );
+
+			}
+
+		</script>
+	</body>
+</html>
