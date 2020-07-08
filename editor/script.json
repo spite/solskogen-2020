@@ -101,7 +101,7 @@
 				"\t\tintro.geoShader.uniforms.exposureSpecular.value = 1.0;",
 				"\t\tintro.geoShader.uniforms.roughness.value = 1.0;",
 				"\t\tintro.geoShader.uniforms.normalScale.value = 1.0;",
-				"\t\tintro.geoShader.uniforms.texScale.value = 1.0;",
+				"\t\tintro.geoShader.uniforms.texScale.value = 0.1;",
 				"\t\tintro.geoShader.uniforms.stripeFreq.value = 1.0;",
 				"\t\tintro.geoShader.uniforms.stripeOffset.value = 1.0;",
 				"",
@@ -219,7 +219,7 @@
 				"",
 				"\tcamera.position.set( 0, 0, invProgress * 10 + 4 );",
 				"\t",
-				"\ttarget.set( 0, - 8 * invProgress, 0 );",
+				"\ttarget.set( 0, - 7 * invProgress, 0 );",
 				"\tcamera.lookAt( target );",
 				"",
 				"}"
@@ -293,29 +293,8 @@
 				"",
 				"function update( progress ){",
 				"\t",
-				"\tconst invProgress = 1 - progress;",
-				"",
 				"\tcamera.position.set( 0, 6, progress * 6 );",
 				"\tcamera.rotation.set( - Math.PI / 2, 0, 0 );",
-				"",
-				"}"
-			]
-		},
-		{
-			"name": "Camera Side Far",
-			"source": [
-				"const camera = resources.get( 'camera' );",
-				"",
-				"function start(){}",
-				"",
-				"function end(){}",
-				"",
-				"function update( progress ){",
-				"\t",
-				"\tconst invProgress = 1 - progress;",
-				"",
-				"\tcamera.position.set( 4 - progress * 2, 5, - 7 * invProgress - 3 );",
-				"\tcamera.rotation.set( 0, Math.PI / 2, 0 );",
 				"",
 				"}"
 			]
@@ -337,12 +316,6 @@
 				"",
 				"\tshape.uniforms.smoothness.value = 0.0;",
 				"\tshape.uniforms.tetrahedronFactor.value = 1.0;",
-				"",
-				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
-				"\tshape.uniforms.exposureSpecular.value = 1.0;",
-				"",
-				"\tshape.uniforms.texScale.value = 0.1;",
-				"\tshape.uniforms.normalScale.value = 0.0;",
 				"}"
 			]
 		},
@@ -366,12 +339,6 @@
 				"\tshape.uniforms.smoothness.value = progress;",
 				"\tshape.uniforms.cubeFactor.value = progress;",
 				"\tshape.uniforms.tetrahedronFactor.value = invProgress;",
-				"",
-				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
-				"\tshape.uniforms.exposureSpecular.value = 1.0;",
-				"",
-				"\tshape.uniforms.texScale.value = 0.1;",
-				"\tshape.uniforms.normalScale.value = progress;",
 				"",
 				"\t",
 				"}"
@@ -410,13 +377,6 @@
 				"",
 				"\tshape.uniforms.octahedronFactor.value = progress;",
 				"\tshape.uniforms.cubeFactor.value = invProgress;",
-				"",
-				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
-				"\tshape.uniforms.exposureSpecular.value = 1.0;",
-				"",
-				"\tshape.uniforms.texScale.value = 0.1;",
-				"\tshape.uniforms.normalScale.value = progress;",
-				"",
 				"\t",
 				"}"
 			]
@@ -440,12 +400,6 @@
 				"",
 				"\tshape.uniforms.icosahedronFactor.value = progress;",
 				"\tshape.uniforms.octahedronFactor.value = invProgress;",
-				"",
-				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
-				"\tshape.uniforms.exposureSpecular.value = 1.0;",
-				"",
-				"\tshape.uniforms.texScale.value = 0.1;",
-				"\tshape.uniforms.normalScale.value = progress;",
 				"",
 				"\t",
 				"}"
@@ -471,12 +425,6 @@
 				"\tshape.uniforms.dodecahedronFactor.value = progress;",
 				"\tshape.uniforms.icosahedronFactor.value = invProgress;",
 				"",
-				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
-				"\tshape.uniforms.exposureSpecular.value = 1.0;",
-				"",
-				"\tshape.uniforms.texScale.value = 0.1;",
-				"\tshape.uniforms.normalScale.value = progress;",
-				"",
 				"\t",
 				"}"
 			]
@@ -501,46 +449,21 @@
 				"\tshape.uniforms.sphereFactor.value = progress;",
 				"\tshape.uniforms.dodecahedronFactor.value = invProgress;",
 				"",
-				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
-				"\tshape.uniforms.exposureSpecular.value = 1.0;",
-				"",
-				"\tshape.uniforms.texScale.value = 0.1;",
-				"\tshape.uniforms.normalScale.value = progress;",
-				"",
 				"\t",
 				"}"
 			]
 		},
 		{
-			"name": "Effect",
+			"name": "Fade In",
 			"source": [
-				"var parameters = {",
-				"\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-				"};",
+				"const shape = resources.get( 'shape' );",
 				"",
 				"function start(){}",
 				"",
 				"function end(){}",
 				"",
-				"function update( progress ){}"
-			]
-		},
-		{
-			"name": "Effect",
-			"source": [
-				"const shape = resources.get( 'shape' );",
-				"",
-				"function start(){",
-				"",
-				"\tshape.postUniforms.opacity.value = 1;",
-				"",
-				"}",
-				"",
-				"function end(){}",
-				"",
 				"function update( progress ){",
 				"",
-				"\tconst invProgress = 1.0 - progress;",
 				"\tshape.postUniforms.opacity.value = progress;",
 				"",
 				"\t",
@@ -548,29 +471,11 @@
 			]
 		},
 		{
-			"name": "Effect",
-			"source": [
-				"var parameters = {",
-				"\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-				"};",
-				"",
-				"function start(){}",
-				"",
-				"function end(){}",
-				"",
-				"function update( progress ){}"
-			]
-		},
-		{
-			"name": "Effect",
+			"name": "Fade Out",
 			"source": [
 				"const shape = resources.get( 'shape' );",
 				"",
-				"function start(){",
-				"",
-				"\tshape.postUniforms.opacity.value = 1;",
-				"",
-				"}",
+				"function start(){}",
 				"",
 				"function end(){}",
 				"",
@@ -584,17 +489,39 @@
 			]
 		},
 		{
-			"name": "Effect",
+			"name": "Flashes",
 			"source": [
-				"var parameters = {",
-				"\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-				"};",
+				"const intro = resources.get( 'intro' );",
 				"",
 				"function start(){}",
 				"",
 				"function end(){}",
 				"",
-				"function update( progress ){}"
+				"function update( progress ){",
+				"",
+				"\tconst length = 0.677;",
+				"\tconst amount = ( length - ( player.currentTime % length ) ) * 2;",
+				"\t// intro.final.shader.uniforms.exposure.value = amount;",
+				"\tintro.geoShader.uniforms.exposureDiffuse.value = amount;",
+				"",
+				"}"
+			]
+		},
+		{
+			"name": "Roughness",
+			"source": [
+				"const shape = resources.get( 'shape' );",
+				"",
+				"function start(){}",
+				"",
+				"function end(){}",
+				"",
+				"function update( progress ){",
+				"",
+				"\tshape.uniforms.roughness.value = progress;",
+				"\tshape.uniforms.normalScale.value = progress;",
+				"",
+				"}"
 			]
 		}
 	],
@@ -620,7 +547,7 @@
 			"start": 0,
 			"end": 20,
 			"layer": 3,
-			"effectId": 9,
+			"effectId": 8,
 			"enabled": true
 		},
 		{
@@ -632,11 +559,19 @@
 			"enabled": true
 		},
 		{
-			"name": "Animation",
+			"name": "",
 			"start": 0,
 			"end": 2,
 			"layer": 6,
-			"effectId": 17,
+			"effectId": 15,
+			"enabled": true
+		},
+		{
+			"name": "",
+			"start": 0,
+			"end": 93.32352941176474,
+			"layer": 7,
+			"effectId": 18,
 			"enabled": true
 		},
 		{
@@ -644,7 +579,7 @@
 			"start": 1.1875,
 			"end": 3.1875,
 			"layer": -1,
-			"effectId": 11,
+			"effectId": 10,
 			"enabled": true
 		},
 		{
@@ -660,7 +595,7 @@
 			"start": 20.15625,
 			"end": 21.78125,
 			"layer": 4,
-			"effectId": 10,
+			"effectId": 9,
 			"enabled": true
 		},
 		{
@@ -673,10 +608,18 @@
 		},
 		{
 			"name": "Animation",
-			"start": 32.875,
-			"end": 37.78125,
+			"start": 32.893292682926834,
+			"end": 37.799542682926834,
 			"layer": 4,
-			"effectId": 12,
+			"effectId": 11,
+			"enabled": true
+		},
+		{
+			"name": "",
+			"start": 32.89405487804878,
+			"end": 76.77640781922523,
+			"layer": 6,
+			"effectId": 17,
 			"enabled": true
 		},
 		{
@@ -700,7 +643,7 @@
 			"start": 43.90625,
 			"end": 49.4375,
 			"layer": 4,
-			"effectId": 13,
+			"effectId": 12,
 			"enabled": true
 		},
 		{
@@ -716,7 +659,7 @@
 			"start": 54.90625,
 			"end": 59.375,
 			"layer": 4,
-			"effectId": 14,
+			"effectId": 13,
 			"enabled": true
 		},
 		{
@@ -732,7 +675,7 @@
 			"start": 65.96875,
 			"end": 71.6875,
 			"layer": 4,
-			"effectId": 15,
+			"effectId": 14,
 			"enabled": true
 		},
 		{
@@ -744,19 +687,11 @@
 			"enabled": true
 		},
 		{
-			"name": "Animation",
+			"name": "",
 			"start": 91.3125,
 			"end": 93.3125,
 			"layer": 6,
-			"effectId": 19,
-			"enabled": true
-		},
-		{
-			"name": "",
-			"start": 93.43853067859028,
-			"end": 100.84393608399559,
-			"layer": 4,
-			"effectId": 8,
+			"effectId": 16,
 			"enabled": true
 		}
 	]
