@@ -1,4 +1,4 @@
-import { WebGLRenderer, Vector4 } from "./third_party/three.module.js";
+import { WebGLRenderer, Vector4, Color } from "./third_party/three.module.js";
 import { OrbitControls } from "./third_party/OrbitControls.js";
 import { Effect as IntroEffect } from "./effects/intro.js";
 import { Composer } from "./js/Composer.js";
@@ -25,40 +25,50 @@ const params = new (function () {
   this.texScale = 2;
   this.stripeFreq = 10;
   this.stripeOffset = 0;
-  this.stripeColor = new Vector4(0, 0.1, 0.1, 0.1);
-  this.baseColor = new Vector4(0.1, 0, 0, 0.1);
+  this.stripeColor = [0, 0, 0];
+  this.stripeColorIntensity = 0;
+  this.baseColor = [0, 0, 0];
+  this.baseColorIntensity = 0;
+  this.ambientColor = [0, 0, 0];
+  this.ambientColorIntensity = 0;
   this.blurExposure = 1;
   this.blurRadius = 1;
   this.blurStrength = 1;
 })();
 
 const geoShaderFolder = gui.addFolder("Geo Shader");
-geoShaderFolder.add(params, "exposureDiffuse", 0, 3);
-geoShaderFolder.add(params, "exposureSpecular", 0, 3);
-geoShaderFolder.add(params, "roughness", 0, 3);
-geoShaderFolder.add(params, "normalScale", 0, 1);
-geoShaderFolder.add(params, "texScale", 0, 3);
-geoShaderFolder.add(params, "stripeFreq", 0, 100);
-geoShaderFolder.add(params, "stripeOffset", 0, 2 * Math.PI);
+geoShaderFolder.add(params, "exposureDiffuse", 0, 3, 0.01);
+geoShaderFolder.add(params, "exposureSpecular", 0, 3, 0.01);
+geoShaderFolder.add(params, "roughness", 0, 3, 0.01);
+geoShaderFolder.add(params, "normalScale", 0, 1, 0.01);
+geoShaderFolder.add(params, "texScale", 0, 3, 0.01);
+geoShaderFolder.add(params, "stripeFreq", 0, 100, 0.01);
+geoShaderFolder.add(params, "stripeOffset", 0, 2 * Math.PI, 0.01);
+geoShaderFolder.addColor(params, "stripeColor");
+geoShaderFolder.add(params, "stripeColorIntensity", 0, 4, 0.01);
+geoShaderFolder.addColor(params, "baseColor");
+geoShaderFolder.add(params, "baseColorIntensity", 0, 4, 0.01);
+geoShaderFolder.addColor(params, "ambientColor");
+geoShaderFolder.add(params, "ambientColorIntensity", 0, 4, 0.01);
 geoShaderFolder.open();
 
 const geometryFolder = gui.addFolder("Geometry");
-geometryFolder.add(params, "smoothness", 0.02, 1);
-geometryFolder.add(params, "tetrahedronFactor", 0, 2);
-geometryFolder.add(params, "cubeFactor", 0, 2);
-geometryFolder.add(params, "octahedronFactor", 0, 2);
-geometryFolder.add(params, "dodecahedronFactor", 0, 2);
-geometryFolder.add(params, "icosahedronFactor", 0, 2);
-geometryFolder.add(params, "sphereFactor", 0, 2);
-geometryFolder.add(params, "twistX", 0.0, 1);
-geometryFolder.add(params, "twistY", 0.0, 1);
-geometryFolder.add(params, "twistZ", 0.0, 1);
+geometryFolder.add(params, "smoothness", 0.02, 1, 0.01);
+geometryFolder.add(params, "tetrahedronFactor", 0, 2, 0.01);
+geometryFolder.add(params, "cubeFactor", 0, 2, 0.01);
+geometryFolder.add(params, "octahedronFactor", 0, 2, 0.01);
+geometryFolder.add(params, "dodecahedronFactor", 0, 2, 0.01);
+geometryFolder.add(params, "icosahedronFactor", 0, 2, 0.01);
+geometryFolder.add(params, "sphereFactor", 0, 2, 0.01);
+geometryFolder.add(params, "twistX", 0.0, 1, 0.01);
+geometryFolder.add(params, "twistY", 0.0, 1, 0.01);
+geometryFolder.add(params, "twistZ", 0.0, 1, 0.01);
 geometryFolder.open();
 
 const postFolder = gui.addFolder("Post");
-postFolder.add(params, "blurExposure", 0, 3);
-postFolder.add(params, "blurRadius", 0, 1);
-postFolder.add(params, "blurStrength", 0, 2);
+postFolder.add(params, "blurExposure", 0, 3, 0.01);
+postFolder.add(params, "blurRadius", 0, 1, 0.01);
+postFolder.add(params, "blurStrength", 0, 2, 0.01);
 
 const canvas = document.createElement("canvas");
 document.body.append(canvas);
@@ -98,6 +108,12 @@ function render(t) {
   intro.geoShader.uniforms.dodecahedronFactor.value = params.dodecahedronFactor;
   intro.geoShader.uniforms.sphereFactor.value = params.sphereFactor;
 
+  intro.geoShader.uniforms.baseColor.value.set(
+    params.baseColor[0] / 255,
+    params.baseColor[1] / 255,
+    params.baseColor[2] / 255,
+    params.baseColorIntensity
+  );
   intro.geoShader.uniforms.exposureDiffuse.value = params.exposureDiffuse;
   intro.geoShader.uniforms.exposureSpecular.value = params.exposureSpecular;
   intro.geoShader.uniforms.roughness.value = params.roughness;
