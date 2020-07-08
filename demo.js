@@ -14,6 +14,9 @@ const params = new (function () {
   this.icosahedronFactor = 0;
   this.sphereFactor = 0;
   this.smoothness = 0.05;
+  this.twistX = 0;
+  this.twistY = 0;
+  this.twistZ = 0;
 
   this.exposureDiffuse = 0.5;
   this.exposureSpecular = 0.5;
@@ -47,6 +50,9 @@ geometryFolder.add(params, "octahedronFactor", 0, 2);
 geometryFolder.add(params, "dodecahedronFactor", 0, 2);
 geometryFolder.add(params, "icosahedronFactor", 0, 2);
 geometryFolder.add(params, "sphereFactor", 0, 2);
+geometryFolder.add(params, "twistX", 0.0, 1);
+geometryFolder.add(params, "twistY", 0.0, 1);
+geometryFolder.add(params, "twistZ", 0.0, 1);
 geometryFolder.open();
 
 const postFolder = gui.addFolder("Post");
@@ -82,6 +88,9 @@ start.addEventListener("click", () => {
 
 function render(t) {
   intro.geoShader.uniforms.smoothness.value = params.smoothness;
+  intro.geoShader.uniforms.twistX.value = params.twistX;
+  intro.geoShader.uniforms.twistY.value = params.twistY;
+  intro.geoShader.uniforms.twistZ.value = params.twistZ;
   intro.geoShader.uniforms.tetrahedronFactor.value = params.tetrahedronFactor;
   intro.geoShader.uniforms.cubeFactor.value = params.cubeFactor;
   intro.geoShader.uniforms.octahedronFactor.value = params.octahedronFactor;

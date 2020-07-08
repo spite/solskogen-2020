@@ -18,6 +18,9 @@ uniform float icosahedronFactor;
 uniform float dodecahedronFactor;
 uniform float sphereFactor;
 uniform float smoothness;
+uniform float twistX;
+uniform float twistY;
+uniform float twistZ;
 
 uniform float time;
 
@@ -64,14 +67,15 @@ float displacement(vec3 p) {
   return .5*sin(s*p.x)*sin(s*p.y)*sin(s*p.z);
 }
 
-vec3 opTwist( vec3 p )
+
+vec3 opTwistY( vec3 p, float twist )
 {
-    float scale = .5;
-    float t = time + cos (p.y)*sin (time)*p.y;
-    float c = cos(scale*p.y+t);
-    float s = sin(scale*p.y+t);
+    float k = twist;
+    float c = cos(k*p.y);
+    float s = sin(k*p.y);
     mat2  m = mat2(c,-s,s,c);
-    vec3  q = vec3(m*p.xz,p.y);
+    vec2 r = m*p.xz;
+    vec3  q = vec3(r.x,p.y,r.y);
     return q;
 }
 
@@ -213,9 +217,9 @@ float fIcosahedron(vec3 p, float r, float e) {
 }
 
 float map (vec3 p, float t) {
-  vec3 pp = p;// opTwist( p );
+  vec3 pp = opTwistY( p, twistY );
   float tetra = sdTetrahedron(pp, max(.0001,tetrahedronFactor)) - .1;
-  float cube = sdRoundBox(pp, vec3(cubeFactor), .05);
+  float cube = sdRoundBox(pp, vec3(cubeFactor), .1);
   float octa = sdOctahedron(pp, 1.25 * octahedronFactor) - .1;
   float icosa = fIcosahedron(pp, 1. * icosahedronFactor, 50.);
   float dodeca = fDodecahedron(pp, 1. * dodecahedronFactor, 50.);

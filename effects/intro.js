@@ -267,6 +267,9 @@ class Effect extends glEffectBase {
         specularMap: { value: specular },
 
         smoothness: { value: 0.05 },
+        twistX: { value: 0 },
+        twistY: { value: 0 },
+        twistZ: { value: 0 },
         tetrahedronFactor: { value: 0 },
         cubeFactor: { value: 0 },
         octahedronFactor: { value: 0 },
