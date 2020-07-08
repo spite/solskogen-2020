@@ -309,6 +309,8 @@ class Effect extends glEffectBase {
 
     this.camera.position.set(4, 4, 4);
     this.camera.lookAt(box.position);
+
+    this.renderer.compile(this.scene,this.camera);
   }
 
   setSize(w, h) {
