@@ -1,7 +1,41 @@
-import { WebGLRenderer } from "./third_party/three.module.js";
+import { WebGLRenderer, Vector4 } from "./third_party/three.module.js";
 import { OrbitControls } from "./third_party/OrbitControls.js";
 import { Effect as IntroEffect } from "./effects/intro.js";
 import { Composer } from "./js/Composer.js";
+import * as dat from "./third_party/dat.gui.module.js";
+
+const gui = new dat.GUI();
+
+const params = new (function () {
+  this.exposure = 0.5;
+  this.roughness = 2;
+  this.normalScale = 0.5;
+  this.texScale = 2;
+  this.stripeFreq = 10;
+  this.stripeOffset = 0;
+  this.stripeColor = new Vector4(0, 0.1, 0.1, 0.1);
+  this.baseColor = new Vector4(0.1, 0, 0, 0.1);
+  this.blurExposure = 1;
+  this.blurRadius = 1;
+  this.blurStrength = 1;
+})();
+
+const geoShaderFolder = gui.addFolder("Geo Shader");
+geoShaderFolder.add(params, "exposure", 0, 3);
+geoShaderFolder.add(params, "roughness", 0, 3);
+geoShaderFolder.add(params, "normalScale", 0, 1);
+geoShaderFolder.add(params, "texScale", 0, 3);
+geoShaderFolder.add(params, "stripeFreq", 0, 100);
+geoShaderFolder.add(params, "stripeOffset", 0, 2 * Math.PI);
+
+const geometryFolder = gui.addFolder("Geometry");
+
+const postFolder = gui.addFolder("Post");
+postFolder.add(params, "blurExposure", 0, 3);
+postFolder.add(params, "blurRadius", 0, 3);
+postFolder.add(params, "blurStrength", 0, 1);
+
+//gui.add(params, "exposure", 0, 3);
 
 const canvas = document.createElement("canvas");
 document.body.append(canvas);
@@ -30,6 +64,13 @@ start.addEventListener("click", () => {
 });
 
 function render(t) {
+  intro.geoShader.uniforms.exposure.value = params.exposure;
+  intro.geoShader.uniforms.roughness.value = params.roughness;
+  intro.geoShader.uniforms.normalScale.value = params.normalScale;
+  intro.geoShader.uniforms.texScale.value = params.texScale;
+  intro.geoShader.uniforms.stripeFreq.value = params.stripeFreq;
+  intro.geoShader.uniforms.stripeOffset.value = params.stripeOffset;
+
   intro.render(audio.currentTime);
   composer.render(intro.post.fbo);
   requestAnimationFrame(render);

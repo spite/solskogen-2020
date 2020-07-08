@@ -173,7 +173,7 @@ class Effect extends glEffectBase {
     for (let i = 0; i < this.levels; i++) {
       const blurPass = new ShaderPingPongPass(this.renderer, blurShader, {
         format: RGBAFormat,
-        type: UnsignedByteType,
+        type: FloatType,
       });
       this.blurPasses.push(blurPass);
     }
