@@ -100,8 +100,8 @@ void main() {
 
   vec4 color = blended_color;
   color.rgb *= baseColor.rgb;
-  color.rgb *= stripeColor.rgb * stripe;
-  color.a += baseColor.a;
+  color.rgb += stripeColor.rgb * stripe;
+  color.a *= baseColor.a;
   color.a += stripeColor.a * stripe;
 
   vec4 refDiff = vec4(0.);

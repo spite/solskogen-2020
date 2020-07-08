@@ -268,8 +268,8 @@ class Effect extends glEffectBase {
         texScale: { value: 2 }, // Triplanar mapping scale.
         stripeFreq: { value: 10 }, // Vertical frequency of stripes.
         stripeOffset: { value: Math.PI / 2 }, // Radians.
-        stripeColor: { value: new Vector4(1, 0, 0, 0) }, // R G B Intensity
-        baseColor: { value: new Vector4(0.1, 0, 0, 0) }, // R G B Intensity
+        stripeColor: { value: new Vector4(0, 0.1, 0.1, 0.1) }, // R G B Intensity
+        baseColor: { value: new Vector4(0.1, 0, 0, 0.1) }, // R G B Intensity
       },
       vertexShader: geoVs,
       fragmentShader: geoFs,
