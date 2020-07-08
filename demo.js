@@ -134,9 +134,9 @@ function render(t) {
   intro.geoShader.uniforms.stripeFreq.value = params.stripeFreq;
   intro.geoShader.uniforms.stripeOffset.value = params.stripeOffset;
 
-  intro.post.shader.uniforms.radius.value = params.blurRadius;
+  intro.final.shader.uniforms.radius.value = params.blurRadius;
   intro.blurStrength = params.blurStrength;
-  intro.post.shader.uniforms.exposure.value = params.blurExposure;
+  intro.final.shader.uniforms.exposure.value = params.blurExposure;
 
   intro.render(audio.currentTime);
   composer.render(intro.post.fbo);

@@ -44,6 +44,7 @@ import { shader as orthoVs } from "../shaders/ortho-vs.js";
 import { shader as highlightFs } from "../shaders/highlight-fs.js";
 import { shader as blurFs } from "../shaders/blur-fs.js";
 import { screen } from "../shaders/screen.js";
+import { chromaticAberration } from "../shaders/chromatic-aberration.js";
 
 const blurShader = new RawShaderMaterial({
   uniforms: {
@@ -102,6 +103,22 @@ void main() {
 }
 `;
 
+const finalFs = `
+precision highp float;
+
+uniform sampler2D inputTexture;
+
+varying vec2 vUv;
+
+${chromaticAberration}
+
+void main() {
+  float amount = 0.2;
+  vec4 c = chromaticAberration(inputTexture, vUv, amount);
+  gl_FragColor = c;
+}
+`;
+
 const shader = new RawShaderMaterial({
   uniforms: {
     fbo: { value: null },
@@ -117,6 +134,14 @@ const shader = new RawShaderMaterial({
   },
   vertexShader,
   fragmentShader,
+});
+
+const finalShader = new RawShaderMaterial({
+  uniforms: {
+    inputTexture: { value: null },
+  },
+  vertexShader: orthoVs,
+  fragmentShader: finalFs,
 });
 
 const concrete = {
@@ -164,7 +189,10 @@ specular.wrapS = specular.wrapT = RepeatWrapping;
 class Effect extends glEffectBase {
   constructor(renderer) {
     super(renderer);
-    this.post = new ShaderPass(this.renderer, shader);
+    this.post = new ShaderPass(this.renderer, finalShader);
+    this.final = new ShaderPass(this.renderer, shader);
+    this.post.shader.uniforms.inputTexture.value = this.final.fbo.texture;
+
     this.highlight = new ShaderPass(this.renderer, highlightShader);
     shader.uniforms.fbo.value = this.fbo.texture;
     highlightShader.uniforms.inputTexture.value = this.fbo.texture;
@@ -198,10 +226,10 @@ class Effect extends glEffectBase {
         0.75,
         Math.random() * 0.5 + 0.5
       );
-      const color = new Vector4(hsl.r, hsl.g, hsl.b, Maf.randomInRange(1, 4));
+      const color = new Vector4(hsl.r, hsl.g, hsl.b, Maf.randomInRange(2, 4));
       // color.g = color.b = 0;
       const mat = new RawShaderMaterial({
-        uniforms: { color: { value: color } },
+        uniforms: { color: { value: color }, range: { value: 0 } },
         vertexShader: neonVs,
         fragmentShader: neonFs,
       });
@@ -230,11 +258,11 @@ class Effect extends glEffectBase {
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
         Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(1, 4)
+        Maf.randomInRange(2, 4)
       );
       // color.g = color.b = 0;
       const mat = new RawShaderMaterial({
-        uniforms: { color: { value: color } },
+        uniforms: { color: { value: color }, range: { value: 0 } },
         vertexShader: neonVs,
         fragmentShader: neonFs,
       });
@@ -314,6 +342,7 @@ class Effect extends glEffectBase {
   setSize(w, h) {
     super.setSize(w, h);
     this.post.setSize(w, h);
+    this.final.setSize(w, h);
     this.highlight.setSize(w, h);
     shader.uniforms.resolution.value.set(w, h);
     blurShader.uniforms.resolution.value.set(w, h);
@@ -334,12 +363,14 @@ class Effect extends glEffectBase {
     const speed = 10;
     const spread = 50;
     for (const m of this.ring1.children) {
+      m.material.uniforms.range.value = spread / 2;
       m.position.z =
         ((m.userData.offset * spread + speed * m.userData.factor * t) %
           spread) -
         spread / 2;
     }
     for (const m of this.ring2.children) {
+      m.material.uniforms.range.value = spread / 2;
       m.position.z =
         ((m.userData.offset * spread + speed * m.userData.factor * t) %
           spread) -
@@ -373,8 +404,8 @@ class Effect extends glEffectBase {
       blurShader.uniforms.inputTexture.value =
         blurPass.fbos[blurPass.currentFBO];
     }
-    //this.post.shader.uniforms.fbo.value = this.highlight.fbo.texture;
 
+    this.final.render();
     this.post.render();
   }
 }
