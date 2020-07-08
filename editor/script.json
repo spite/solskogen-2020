@@ -458,7 +458,9 @@
 			"source": [
 				"const shape = resources.get( 'shape' );",
 				"",
-				"function start(){}",
+				"function start(){",
+				"\tshape.postUniforms.opacity.value = 1;",
+				"}",
 				"",
 				"function end(){}",
 				"",
