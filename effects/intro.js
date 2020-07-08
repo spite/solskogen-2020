@@ -31,7 +31,7 @@ import {
 import { ShaderPass } from "../js/ShaderPass.js";
 import { ShaderPingPongPass } from "../js/ShaderPingPongPass.js";
 import { shader as vertexShader } from "../shaders/ortho-vs.js";
-import Maf from "../third_party/maf.js";
+import Maf from "../third_party/Maf.js";
 
 import { shader as geoVs } from "../shaders/sdf-geo-vs.js";
 import { shader as geoFs } from "../shaders/sdf-geo-fs.js";
@@ -88,7 +88,7 @@ ${screen}
 
 void main() {
   vec4 c = texture2D(fbo, vUv);
-  
+
   vec4 bloom = vec4(0.);
   bloom += lerpBloomFactor(1.) * texture2D( blur0Tex, vUv );
   bloom += lerpBloomFactor(.8) * texture2D( blur1Tex, vUv );

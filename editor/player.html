@@ -21,6 +21,10 @@
 	<body>
 		<div id="container"></div>
 
+		<script>
+			function glsl(s) { return s[0]; }
+		</script>
+
 		<script type="module">
 
 			import { Resources, Player, Timeline } from './Frame.js';
@@ -31,15 +35,7 @@
 			var timeline = new Timeline();
 			var player = new Player();
 
-			//
-
-			var query = window.location.search;
-
-			if ( query.substr( 1, 5 ) === 'file=' ) {
-
-				load( query.substr( 6 ) );
-
-			}
+			load( './script.json' );
 
 			//
 
