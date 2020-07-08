@@ -167,11 +167,11 @@
 				"\t",
 				"\tconst invProgress = 1 - progress;",
 				"",
-				"\tcamera.position.set( 0,  - 50 * invProgress, - 5 );",
+				"\tcamera.position.set( 0,  - 40 * invProgress, - 10 );",
 				"",
-				"\ttarget.x = Math.cos( progress * 8 ) * 2;",
-				"\ttarget.y = Math.sin( progress * 4 ) * 2;",
-				"\ttarget.z = - 50;",
+				"\ttarget.x = Math.cos( progress * 8 ) * 4;",
+				"\ttarget.y = Math.sin( progress * 4 ) * 4;",
+				"\ttarget.z = - 20;",
 				"\tcamera.lookAt( target );",
 				"",
 				"}"
@@ -197,7 +197,7 @@
 				"\ttarget.y = Math.cos( progress * 5 );",
 				"\ttarget.z = - 10 * invProgress + 2;",
 				"\tcamera.lookAt( target );",
-				"\t// camera.rotation.z = - Math.PI / 2;",
+				"\tcamera.rotation.z = Math.PI / 2;",
 				"",
 				"}"
 			]
@@ -218,7 +218,7 @@
 				"",
 				"\tcamera.position.set( 0, 0, invProgress * 10 + 4 );",
 				"\t",
-				"\ttarget.set( 0, - 7 * invProgress, 0 );",
+				"\ttarget.set( 0, - 8 * invProgress, 0 );",
 				"\tcamera.lookAt( target );",
 				"",
 				"}"
