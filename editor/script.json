@@ -74,9 +74,43 @@
 				"const cameraTarget = new Vector3();",
 				"",
 				"resources.set('audio', audio);",
+				"resources.set('intro', intro);",
 				"resources.set('render', render);",
 				"resources.set('camera', intro.camera);",
 				"resources.set('cameraTarget', cameraTarget);"
+			]
+		},
+		{
+			"name": "Shape",
+			"source": [
+				"const intro = resources.get( 'intro' );",
+				"",
+				"const shape = {",
+				"\tuniforms: intro.geoShader.uniforms,",
+				"\treset: function () {",
+				"\t\tintro.geoShader.uniforms.smoothness.value = 1.0;",
+				"\t\tintro.geoShader.uniforms.tetrahedronFactor.value = 0.0;",
+				"\t\tintro.geoShader.uniforms.cubeFactor.value = 0.0;",
+				"\t\tintro.geoShader.uniforms.octahedronFactor.value = 0.0;",
+				"\t\tintro.geoShader.uniforms.icosahedronFactor.value = 0.0;",
+				"\t\tintro.geoShader.uniforms.dodecahedronFactor.value = 0.0;",
+				"\t\tintro.geoShader.uniforms.sphereFactor.value = 0.0;",
+				"",
+				"\t\tintro.geoShader.uniforms.exposureDiffuse.value = 0.0;",
+				"\t\tintro.geoShader.uniforms.exposureSpecular.value = 1.0;",
+				"\t\tintro.geoShader.uniforms.roughness.value = 1.0;",
+				"\t\tintro.geoShader.uniforms.normalScale.value = 1.0;",
+				"\t\tintro.geoShader.uniforms.texScale.value = 1.0;",
+				"\t\tintro.geoShader.uniforms.stripeFreq.value = 1.0;",
+				"\t\tintro.geoShader.uniforms.stripeOffset.value = 1.0;",
+				"",
+				"\t\tintro.post.shader.uniforms.radius.value = 1.0;",
+				"\t\tintro.blurStrength = 1.0;",
+				"\t\tintro.post.shader.uniforms.exposure.value = 1.0;",
+				"\t}",
+				"}",
+				"",
+				"resources.set( 'shape', shape );"
 			]
 		}
 	],
@@ -94,7 +128,7 @@
 				"",
 				"function update( progress ){",
 				"",
-				"\trender( progress * 150 );",
+				"\trender( progress * 140 );",
 				"",
 				"}"
 			]
@@ -157,11 +191,11 @@
 				"\t",
 				"\tconst invProgress = 1 - progress;",
 				"",
-				"\tcamera.position.set( 4 - progress * 2, 5, - 7 * invProgress - 2 );",
+				"\tcamera.position.set( 4 - progress * 2, 1, - 7 * invProgress - 2 );",
 				"\t",
 				"\ttarget.x = Math.sin( progress * 4 ) * 2;",
-				"\ttarget.y = Math.cos( progress * 6 );",
-				"\ttarget.z = - 11 * invProgress + 2;",
+				"\ttarget.y = Math.cos( progress * 5 );",
+				"\ttarget.z = - 10 * invProgress + 2;",
 				"\tcamera.lookAt( target );",
 				"\t// camera.rotation.z = - Math.PI / 2;",
 				"",
@@ -184,7 +218,7 @@
 				"",
 				"\tcamera.position.set( 0, 0, invProgress * 10 + 4 );",
 				"\t",
-				"\ttarget.set( 0, - 8 * invProgress, 0 );",
+				"\ttarget.set( 0, - 7 * invProgress, 0 );",
 				"\tcamera.lookAt( target );",
 				"",
 				"}"
@@ -284,6 +318,62 @@
 				"",
 				"}"
 			]
+		},
+		{
+			"name": "Shape Sphere",
+			"source": [
+				"const shape = resources.get( 'shape' );",
+				"",
+				"function start(){",
+				"",
+				"\tshape.reset();",
+				"\t",
+				"}",
+				"",
+				"function end(){}",
+				"",
+				"function update( progress ){",
+				"",
+				"",
+				"\tshape.uniforms.sphereFactor.value = 1.0;",
+				"",
+				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
+				"\tshape.uniforms.exposureSpecular.value = 1.0;",
+				"",
+				"\tshape.uniforms.texScale.value = 0.1;",
+				"\tshape.uniforms.normalScale.value = 0.0;",
+				"}"
+			]
+		},
+		{
+			"name": "Shape Transform 1",
+			"source": [
+				"const shape = resources.get( 'shape' );",
+				"",
+				"function start(){",
+				"",
+				"\tshape.reset();",
+				"",
+				"}",
+				"",
+				"function end(){}",
+				"",
+				"function update( progress ){",
+				"",
+				"\tconst invProgress = 1.0 - progress;",
+				"",
+				"\tshape.uniforms.dodecahedronFactor.value = progress;",
+				"\tshape.uniforms.sphereFactor.value = invProgress;",
+				"",
+				"\tshape.uniforms.exposureDiffuse.value = 0.0;",
+				"\tshape.uniforms.exposureSpecular.value = 1.0;",
+				"",
+				"\tshape.uniforms.texScale.value = 0.1;",
+				"\tshape.uniforms.normalScale.value = progress;",
+				"",
+				"\t",
+				"}"
+			]
 		}
 	],
 	"animations": [
@@ -306,8 +396,16 @@
 		{
 			"name": "",
 			"start": 0,
-			"end": 93.3125,
+			"end": 20,
 			"layer": 3,
+			"effectId": 9,
+			"enabled": true
+		},
+		{
+			"name": "",
+			"start": 0,
+			"end": 93.3125,
+			"layer": 5,
 			"effectId": 0,
 			"enabled": true
 		},
@@ -317,6 +415,14 @@
 			"end": 21.956048636744423,
 			"layer": 2,
 			"effectId": 3,
+			"enabled": true
+		},
+		{
+			"name": "",
+			"start": 20.09375,
+			"end": 21.71875,
+			"layer": 4,
+			"effectId": 10,
 			"enabled": true
 		},
 		{
