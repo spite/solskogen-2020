@@ -16,13 +16,10 @@ uniform float time;
 varying vec3 vNormal;
 varying vec3 vONormal;
 varying vec4 vPosition;
-varying vec3 vU;
-varying vec3 lDir;
 varying vec3 vEye;
 
-varying vec3 v_worldPosition;
-varying vec3 v_worldNormal;
-varying vec3 v_position;
+varying vec3 vWorldPosition;
+varying vec3 vWorldNormal;
 
 mat3 rotate_x (float fi) {
 	float cfi = cos (fi);
@@ -282,12 +279,12 @@ float map (vec3 p, float t) {
   float octa = sdOctahedron(pp, 1.25) - .1;
   //return octa;
   float sphere = sdSphere(p, 1.1);
-  //return sphere;
+  return sphere;
   //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
   float tetra = sdTetrahedron(pp, 1.) - .1;
   //return tetra;
-  return  opSmoothUnion(icosa, dodeca, .05);
-  //return  opSmoothUnion(sphere, dodeca, .05);
+  //return  opSmoothUnion(icosa, dodeca, .05);
+  return  opSmoothUnion(sphere, dodeca, .05);
   //return opSmoothIntersection(dodeca, icosa, .5);
   return sdPyramid(pp, 1., .75) - .1;
 }
@@ -325,22 +322,17 @@ void main () {
 
   float d = march( ro, rd, 0. );
   vec3 p = ro + d * rd;
-  vec3 nm = calcNormal (p, 0.);
-  //nm *= -1.;
-
-  vPosition = modelViewMatrix * vec4( p, 1.0 );
-  gl_Position = projectionMatrix * vPosition;
+  vec3 nm = calcNormal (p, 0.) * -1.;
 
   vPosition = vec4( p, 1.0 );
-  vU = normalize( vec3( modelViewMatrix * vec4( p, 1.0 ) ) );
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );;
 
   vEye = ( modelViewMatrix * vec4( p, 1.0 ) ).xyz;
   vNormal = normalMatrix * nm;
   vONormal = nm;
 
-  v_worldPosition = (modelMatrix * vec4(p,1.)).xyz;
-  v_worldNormal = mat3(modelMatrix) * nm;
-  v_position = p;
+  vWorldPosition = (modelMatrix * vec4(p,1.)).xyz;
+  vWorldNormal = mat3(modelMatrix) * nm;
 }
 `;
 

@@ -7,7 +7,8 @@ import * as dat from "./third_party/dat.gui.module.js";
 const gui = new dat.GUI();
 
 const params = new (function () {
-  this.exposure = 0.5;
+  this.exposureDiffuse = 0.5;
+  this.exposureSpecular = 0.5;
   this.roughness = 2;
   this.normalScale = 0.5;
   this.texScale = 2;
@@ -21,7 +22,8 @@ const params = new (function () {
 })();
 
 const geoShaderFolder = gui.addFolder("Geo Shader");
-geoShaderFolder.add(params, "exposure", 0, 3);
+geoShaderFolder.add(params, "exposureDiffuse", 0, 3);
+geoShaderFolder.add(params, "exposureSpecular", 0, 3);
 geoShaderFolder.add(params, "roughness", 0, 3);
 geoShaderFolder.add(params, "normalScale", 0, 1);
 geoShaderFolder.add(params, "texScale", 0, 3);
@@ -64,7 +66,8 @@ start.addEventListener("click", () => {
 });
 
 function render(t) {
-  intro.geoShader.uniforms.exposure.value = params.exposure;
+  intro.geoShader.uniforms.exposureDiffuse.value = params.exposureDiffuse;
+  intro.geoShader.uniforms.exposureSpecular.value = params.exposureSpecular;
   intro.geoShader.uniforms.roughness.value = params.roughness;
   intro.geoShader.uniforms.normalScale.value = params.normalScale;
   intro.geoShader.uniforms.texScale.value = params.texScale;

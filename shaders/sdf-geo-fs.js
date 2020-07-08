@@ -16,7 +16,8 @@ uniform vec3 cameraPosition;
 
 uniform samplerCube envMap;
 
-uniform float exposure;
+uniform float exposureDiffuse;
+uniform float exposureSpecular;
 uniform float roughness;
 uniform float texScale;
 uniform float normalScale;
@@ -24,17 +25,15 @@ uniform float stripeFreq;
 uniform float stripeOffset;
 uniform vec4 stripeColor;
 uniform vec4 baseColor;
+uniform vec4 ambient;
 
 varying vec3 vNormal;
 varying vec3 vONormal;
 varying vec4 vPosition;
-varying vec3 vU;
-varying vec3 lDir;
 varying vec3 vEye;
 
-varying vec3 v_worldPosition;
-varying vec3 v_worldNormal;
-varying vec3 v_position;
+varying vec3 vWorldPosition;
+varying vec3 vWorldNormal;
 
 void main() {
 
@@ -68,7 +67,7 @@ void main() {
                           spec2 * blend_weights.yyyy +  
                           spec3 * blend_weights.zzzz; 
 
-  float stripe = smoothstep(.45,.55, .5 + .5 *sin(stripeOffset + stripeFreq*v_position.y));
+  float stripe = smoothstep(.45,.55, .5 + .5 *sin(stripeOffset + stripeFreq*vPosition.y));
   blended_specular *= .5 + .5 * stripe;
 
   vec3 blended_bump = bump1 * blend_weights.xxx +  
@@ -86,9 +85,10 @@ void main() {
   vec3 normalTex = blended_bump * 2.0 - 1.0;
   normalTex.xy *= normalScale;
   normalTex = normalize( normalTex );
+  normalTex = mix(vec3(0., 0., 1.), normalTex, roughness /3.);
   vec3 tt = normalMatrix * blended_tangent;
-  mat3 tsb = mat3( normalize( tt ), normalize( cross( v_worldNormal, tt ) ), normalize( v_worldNormal ) );
-  vec3 finalNormal = tsb * normalTex;
+  mat3 tsb = mat3( normalize( tt ), normalize( cross( vWorldNormal, tt ) ), normalize( vWorldNormal ) );
+  vec3 finalNormal = tsb * normalTex ;
 
   float rimPower = 4.;
   float useRim = 1.;
@@ -104,17 +104,18 @@ void main() {
   color.a *= baseColor.a;
   color.a += stripeColor.a * stripe;
 
-  vec4 refDiff = vec4(0.);
-  refDiff += textureCubeLodEXT(envMap, finalNormal, roughness * 4.);
-  color += refDiff * exposure;
+  color += ambient;
 
+  vec4 refDiff =  8. * textureCubeLodEXT(envMap, finalNormal,  8. + roughness);
+  color *= refDiff * exposureDiffuse;
+  
   vec4 refSpec = vec4(0.);
-  vec3 eyeToSurfaceDir = normalize(v_worldPosition - cameraPosition);
+  vec3 eyeToSurfaceDir = normalize(vWorldPosition - cameraPosition);
   vec3 fn = reflect(eyeToSurfaceDir,finalNormal);
-  refSpec += .9 * textureCubeLodEXT(envMap, fn, roughness * 4.);
-  refSpec += .6*  textureCubeLodEXT(envMap, fn, roughness * 2.);
-  refSpec += .3*  textureCubeLodEXT(envMap, fn, roughness * 1.);
-  color += blended_specular * refSpec * exposure;
+  refSpec += .9 * textureCubeLodEXT(envMap, fn, 4. + roughness );
+  refSpec += .6*  textureCubeLodEXT(envMap, fn, 2. + roughness );
+  refSpec += .3*  textureCubeLodEXT(envMap, fn, 1. + roughness );
+  color += blended_specular * refSpec * exposureSpecular;
   
   gl_FragColor = color;
  // gl_FragColor = vec4(mat3(viewMatrix) * finalNormal,1.);
