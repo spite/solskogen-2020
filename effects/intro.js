@@ -78,6 +78,7 @@ uniform sampler2D blur4Tex;
 
 uniform float radius;
 uniform float strength;
+uniform float exposure;
 
 varying vec2 vUv;
 
@@ -97,8 +98,7 @@ void main() {
   bloom += lerpBloomFactor(.4) * texture2D( blur3Tex, vUv );
   bloom += lerpBloomFactor(.2) * texture2D( blur4Tex, vUv );
 
-  c += bloom;
-  gl_FragColor = screen(c,bloom,0.);// vec4(vec3(1.) - c.rgb, c.a);
+  gl_FragColor = screen(clamp(vec4(0.), vec4(1.),c), clamp(vec4(0.), vec4(1.), bloom), exposure);// vec4(vec3(1.) - c.rgb, c.a);
 }
 `;
 
@@ -113,6 +113,7 @@ const shader = new RawShaderMaterial({
     resolution: { value: new Vector2(1, 1) },
     radius: { value: 1 },
     strength: { value: 1 },
+    exposure: { value: 1 },
   },
   vertexShader,
   fragmentShader,
@@ -168,6 +169,7 @@ class Effect extends glEffectBase {
     shader.uniforms.fbo.value = this.fbo.texture;
     highlightShader.uniforms.inputTexture.value = this.fbo.texture;
 
+    this.blurStrength = 1;
     this.blurPasses = [];
     this.levels = 5;
 
@@ -348,7 +350,7 @@ class Effect extends glEffectBase {
 
     this.highlight.render();
 
-    let offset = 1;
+    let offset = this.blurStrength;
     blurShader.uniforms.inputTexture.value = this.highlight.fbo.texture;
     for (let j = 0; j < this.levels; j++) {
       blurShader.uniforms.direction.value.set(offset, 0);

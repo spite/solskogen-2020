@@ -51,10 +51,8 @@ geometryFolder.open();
 
 const postFolder = gui.addFolder("Post");
 postFolder.add(params, "blurExposure", 0, 3);
-postFolder.add(params, "blurRadius", 0, 3);
-postFolder.add(params, "blurStrength", 0, 1);
-
-//gui.add(params, "exposure", 0, 3);
+postFolder.add(params, "blurRadius", 0, 1);
+postFolder.add(params, "blurStrength", 0, 2);
 
 const canvas = document.createElement("canvas");
 document.body.append(canvas);
@@ -98,6 +96,10 @@ function render(t) {
   intro.geoShader.uniforms.texScale.value = params.texScale;
   intro.geoShader.uniforms.stripeFreq.value = params.stripeFreq;
   intro.geoShader.uniforms.stripeOffset.value = params.stripeOffset;
+
+  intro.post.shader.uniforms.radius.value = params.blurRadius;
+  intro.blurStrength = params.blurStrength;
+  intro.post.shader.uniforms.exposure.value = params.blurExposure;
 
   intro.render(audio.currentTime);
   composer.render(intro.post.fbo);
