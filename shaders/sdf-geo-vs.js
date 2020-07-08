@@ -285,7 +285,7 @@ float map (vec3 p, float t) {
   //return sphere;
   //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
   float tetra = sdTetrahedron(pp, 1.) - .1;
-  //return tetra;
+  return tetra;
   return  opSmoothUnion(sphere, dodeca, .05);
   //return opSmoothIntersection(dodeca, icosa, .5);
   return sdPyramid(pp, 1., .75) - .1;

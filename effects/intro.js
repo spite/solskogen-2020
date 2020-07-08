@@ -146,7 +146,7 @@ const scrap = {
   normal: "scrap-normal.png",
   specular: "scrap-specular.png",
 };
-const mat = concrete; //scrap;
+const mat = water; //scrap;
 
 const loader = new TextureLoader();
 const matCapTex = loader.load("../assets/matcap.jpg");
@@ -261,8 +261,15 @@ class Effect extends glEffectBase {
         textureMap: { value: diffuse },
         normalMap: { value: normal },
         specularMap: { value: specular },
-        exposure: { value: 0.5 },
-        roughness: { value: 2 },
+
+        exposure: { value: 0.5 }, // Exposure of diffuse and specular lighting.
+        roughness: { value: 2 }, // Roughness (bias of texture lookup)
+        normalScale: { value: 0.5 }, // Normal mapping scale.
+        texScale: { value: 1 }, // Triplanar mapping scale.
+        stripeFreq: { value: 10 }, // Vertical frequency of stripes.
+        stripeOffset: { value: Math.PI / 2 }, // Radians.
+        stripeColor: { value: new Vector4(1, 0, 0, 0) }, // R G B Intensity
+        baseColor: { value: new Vector4(0.1, 0, 0, 0) }, // R G B Intensity
       },
       vertexShader: geoVs,
       fragmentShader: geoFs,
