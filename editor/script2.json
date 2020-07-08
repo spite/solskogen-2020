@@ -67,12 +67,12 @@
         "}",
         "",
         "init();",
-        "",
+        " ",
         "intro.camera.fov = 50;",
         "intro.camera.updateProjectionMatrix();",
         "",
         "const cameraTarget = new Vector3();",
-        "",
+        " ",
         "resources.set('audio', audio);",
         "resources.set('intro', intro);",
         "resources.set('render', render);",
@@ -87,6 +87,7 @@
         "",
         "const shape = {",
         "\tuniforms: intro.geoShader.uniforms,",
+        "\tpostUniforms: intro.post.shader.uniforms,",
         "\treset: function () {",
         "\t\tintro.geoShader.uniforms.smoothness.value = 1.0;",
         "\t\tintro.geoShader.uniforms.tetrahedronFactor.value = 0.0;",
@@ -104,9 +105,9 @@
         "\t\tintro.geoShader.uniforms.stripeFreq.value = 1.0;",
         "\t\tintro.geoShader.uniforms.stripeOffset.value = 1.0;",
         "",
-        "\t\tintro.post.shader.uniforms.radius.value = 1.0;",
+        "\t\tintro.final.shader.uniforms.radius.value = 1.0;",
         "\t\tintro.blurStrength = 1.0;",
-        "\t\tintro.post.shader.uniforms.exposure.value = 1.0;",
+        "\t\tintro.final.shader.uniforms.exposure.value = 1.0;",
         "\t}",
         "}",
         "",
@@ -167,11 +168,11 @@
         "\t",
         "\tconst invProgress = 1 - progress;",
         "",
-        "\tcamera.position.set( 0,  - 50 * invProgress, - 5 );",
+        "\tcamera.position.set( 0,  - 40 * invProgress, - 10 );",
         "",
-        "\ttarget.x = Math.cos( progress * 8 ) * 2;",
-        "\ttarget.y = Math.sin( progress * 4 ) * 2;",
-        "\ttarget.z = - 50;",
+        "\ttarget.x = Math.cos( progress * 8 ) * 4;",
+        "\ttarget.y = Math.sin( progress * 4 ) * 4;",
+        "\ttarget.z = - 20;",
         "\tcamera.lookAt( target );",
         "",
         "}"
@@ -197,7 +198,7 @@
         "\ttarget.y = Math.cos( progress * 5 );",
         "\ttarget.z = - 10 * invProgress + 2;",
         "\tcamera.lookAt( target );",
-        "\t// camera.rotation.z = - Math.PI / 2;",
+        "\tcamera.rotation.z = Math.PI / 2;",
         "",
         "}"
       ]
@@ -218,7 +219,7 @@
         "",
         "\tcamera.position.set( 0, 0, invProgress * 10 + 4 );",
         "\t",
-        "\ttarget.set( 0, - 7 * invProgress, 0 );",
+        "\ttarget.set( 0, - 8 * invProgress, 0 );",
         "\tcamera.lookAt( target );",
         "",
         "}"
@@ -334,9 +335,8 @@
         "",
         "function update( progress ){",
         "",
-        "",
-        "\tshape.uniforms.sphereFactor.value = 0;",
-        "\tshape.uniforms.tetrahedronFactor.value = 1.;",
+        "\tshape.uniforms.smoothness.value = 0.0;",
+        "\tshape.uniforms.tetrahedronFactor.value = 1.0;",
         "",
         "\tshape.uniforms.exposureDiffuse.value = 0.0;",
         "\tshape.uniforms.exposureSpecular.value = 1.0;",
@@ -363,6 +363,7 @@
         "",
         "\tconst invProgress = 1.0 - progress;",
         "",
+        "\tshape.uniforms.smoothness.value = progress;",
         "\tshape.uniforms.cubeFactor.value = progress;",
         "\tshape.uniforms.tetrahedronFactor.value = invProgress;",
         "",
@@ -374,118 +375,6 @@
         "",
         "\t",
         "}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
       ]
     },
     {
@@ -530,20 +419,6 @@
         "",
         "\t",
         "}"
-      ]
-    },
-    {
-      "name": "Effect",
-      "source": [
-        "var parameters = {",
-        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
-        "};",
-        "",
-        "function start(){}",
-        "",
-        "function end(){}",
-        "",
-        "function update( progress ){}"
       ]
     },
     {
@@ -635,6 +510,78 @@
         "\t",
         "}"
       ]
+    },
+    {
+      "name": "Effect",
+      "source": [
+        "var parameters = {",
+        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
+        "};",
+        "",
+        "function start(){}",
+        "",
+        "function end(){}",
+        "",
+        "function update( progress ){}"
+      ]
+    },
+    {
+      "name": "Effect",
+      "source": [
+        "const shape = resources.get( 'shape' );",
+        "",
+        "function start(){",
+        "",
+        "\tshape.postUniforms.opacity.value = 1;",
+        "",
+        "}",
+        "",
+        "function end(){}",
+        "",
+        "function update( progress ){",
+        "",
+        "\tconst invProgress = 1.0 - progress;",
+        "\tshape.postUniforms.opacity.value = progress;",
+        "",
+        "\t",
+        "}"
+      ]
+    },
+    {
+      "name": "Effect",
+      "source": [
+        "var parameters = {",
+        "\tvalue: new FRAME.Parameters.Float( 'Value', 1.0 )",
+        "};",
+        "",
+        "function start(){}",
+        "",
+        "function end(){}",
+        "",
+        "function update( progress ){}"
+      ]
+    },
+    {
+      "name": "Effect",
+      "source": [
+        "const shape = resources.get( 'shape' );",
+        "",
+        "function start(){",
+        "",
+        "\tshape.postUniforms.opacity.value = 1;",
+        "",
+        "}",
+        "",
+        "function end(){}",
+        "",
+        "function update( progress ){",
+        "",
+        "\tconst invProgress = 1.0 - progress;",
+        "\tshape.postUniforms.opacity.value = invProgress;",
+        "",
+        "\t",
+        "}"
+      ]
     }
   ],
   "animations": [
@@ -672,42 +619,18 @@
     },
     {
       "name": "Animation",
-      "start": 0.3125,
-      "end": 2.3125,
-      "layer": 0,
-      "effectId": 14,
+      "start": 0,
+      "end": 2,
+      "layer": 6,
+      "effectId": 17,
       "enabled": true
     },
     {
       "name": "Animation",
-      "start": 0.3125,
-      "end": 2.3125,
+      "start": 0.25,
+      "end": 2.25,
       "layer": 0,
-      "effectId": 19,
-      "enabled": true
-    },
-    {
-      "name": "Animation",
-      "start": 0.46875,
-      "end": 2.46875,
-      "layer": 0,
-      "effectId": 13,
-      "enabled": true
-    },
-    {
-      "name": "Animation",
-      "start": 0.59375,
-      "end": 2.59375,
-      "layer": 0,
-      "effectId": 11,
-      "enabled": true
-    },
-    {
-      "name": "Animation",
-      "start": 1,
-      "end": 3,
-      "layer": 0,
-      "effectId": 21,
+      "effectId": 18,
       "enabled": true
     },
     {
@@ -715,15 +638,7 @@
       "start": 1.1875,
       "end": 3.1875,
       "layer": -1,
-      "effectId": 15,
-      "enabled": true
-    },
-    {
-      "name": "Animation",
-      "start": 1.25,
-      "end": 3.25,
-      "layer": 0,
-      "effectId": 18,
+      "effectId": 11,
       "enabled": true
     },
     {
@@ -736,18 +651,10 @@
     },
     {
       "name": "Animation",
-      "start": 16.84375,
-      "end": 18.84375,
+      "start": 10.96875,
+      "end": 12.96875,
       "layer": 0,
       "effectId": 16,
-      "enabled": true
-    },
-    {
-      "name": "Animation",
-      "start": 17.125,
-      "end": 19.125,
-      "layer": 0,
-      "effectId": 17,
       "enabled": true
     },
     {
@@ -756,14 +663,6 @@
       "end": 21.78125,
       "layer": 4,
       "effectId": 10,
-      "enabled": true
-    },
-    {
-      "name": "Animation",
-      "start": 20.96875,
-      "end": 22.96875,
-      "layer": 0,
-      "effectId": 12,
       "enabled": true
     },
     {
@@ -779,7 +678,7 @@
       "start": 32.875,
       "end": 37.78125,
       "layer": 4,
-      "effectId": 20,
+      "effectId": 12,
       "enabled": true
     },
     {
@@ -803,7 +702,7 @@
       "start": 43.90625,
       "end": 49.4375,
       "layer": 4,
-      "effectId": 22,
+      "effectId": 13,
       "enabled": true
     },
     {
@@ -819,7 +718,7 @@
       "start": 54.90625,
       "end": 59.375,
       "layer": 4,
-      "effectId": 23,
+      "effectId": 14,
       "enabled": true
     },
     {
@@ -835,7 +734,7 @@
       "start": 65.96875,
       "end": 71.6875,
       "layer": 4,
-      "effectId": 24,
+      "effectId": 15,
       "enabled": true
     },
     {
@@ -844,6 +743,14 @@
       "end": 93.29886084431503,
       "layer": 2,
       "effectId": 7,
+      "enabled": true
+    },
+    {
+      "name": "Animation",
+      "start": 91.3125,
+      "end": 93.3125,
+      "layer": 6,
+      "effectId": 19,
       "enabled": true
     },
     {

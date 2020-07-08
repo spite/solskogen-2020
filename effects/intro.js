@@ -45,6 +45,7 @@ import { shader as highlightFs } from "../shaders/highlight-fs.js";
 import { shader as blurFs } from "../shaders/blur-fs.js";
 import { screen } from "../shaders/screen.js";
 import { chromaticAberration } from "../shaders/chromatic-aberration.js";
+import { vignette } from "../shaders/vignette.js";
 
 const blurShader = new RawShaderMaterial({
   uniforms: {
@@ -107,14 +108,17 @@ const finalFs = `
 precision highp float;
 
 uniform sampler2D inputTexture;
+uniform float opacity;
 
 varying vec2 vUv;
 
 ${chromaticAberration}
+${vignette}
 
 void main() {
   float amount = 0.2;
   vec4 c = chromaticAberration(inputTexture, vUv, amount);
+  c *= opacity * vignette(vUv, 1.5 * opacity, (1.-opacity)*4.);
   gl_FragColor = c;
 }
 `;
@@ -139,6 +143,7 @@ const shader = new RawShaderMaterial({
 const finalShader = new RawShaderMaterial({
   uniforms: {
     inputTexture: { value: null },
+    opacity: { value: 1 },
   },
   vertexShader: orthoVs,
   fragmentShader: finalFs,
@@ -338,7 +343,7 @@ class Effect extends glEffectBase {
     this.camera.position.set(4, 4, 4);
     this.camera.lookAt(box.position);
 
-    this.renderer.compile(this.scene,this.camera);
+    this.renderer.compile(this.scene, this.camera);
   }
 
   setSize(w, h) {

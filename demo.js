@@ -34,6 +34,8 @@ const params = new (function () {
   this.blurExposure = 1;
   this.blurRadius = 1;
   this.blurStrength = 1;
+
+  this.opacity = 1;
 })();
 
 const geoShaderFolder = gui.addFolder("Geo Shader");
@@ -69,6 +71,8 @@ const postFolder = gui.addFolder("Post");
 postFolder.add(params, "blurExposure", 0, 3, 0.01);
 postFolder.add(params, "blurRadius", 0, 1, 0.01);
 postFolder.add(params, "blurStrength", 0, 2, 0.01);
+postFolder.add(params, "opacity", 0, 1, 0.01);
+postFolder.open();
 
 const canvas = document.createElement("canvas");
 document.body.append(canvas);
@@ -137,6 +141,7 @@ function render(t) {
   intro.final.shader.uniforms.radius.value = params.blurRadius;
   intro.blurStrength = params.blurStrength;
   intro.final.shader.uniforms.exposure.value = params.blurExposure;
+  intro.post.shader.uniforms.opacity.value = params.opacity;
 
   intro.render(audio.currentTime);
   composer.render(intro.post.fbo);
