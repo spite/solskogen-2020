@@ -1,4 +1,4 @@
-import { blur13 } from "../../shaders/fast-separable-gaussian-blur.js";
+import { blur13 } from "./fast-separable-gaussian-blur.js";
 
 const shader = `
 precision highp float;
