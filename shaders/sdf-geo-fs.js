@@ -25,7 +25,7 @@ uniform float stripeFreq;
 uniform float stripeOffset;
 uniform vec4 stripeColor;
 uniform vec4 baseColor;
-uniform vec4 ambient;
+uniform vec4 ambientColor;
 
 varying vec3 vNormal;
 varying vec3 vONormal;
@@ -104,7 +104,7 @@ void main() {
   color.a *= baseColor.a;
   color.a += stripeColor.a * stripe;
 
-  color += ambient;
+  color += ambientColor;
 
   vec4 refDiff =  8. * textureCubeLodEXT(envMap, finalNormal,  8. + roughness);
   color *= refDiff * exposureDiffuse;

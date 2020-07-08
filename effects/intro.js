@@ -193,7 +193,11 @@ class Effect extends glEffectBase {
     this.ring1 = new Group();
     const geo = new CylinderBufferGeometry(1, 1, 1, 16).rotateX(-Math.PI / 2);
     for (let j = 0; j < 100; j++) {
-      const hsl = new Color().setHSL(Math.random() * 0.5, 0.75, Math.random()*0.5+0.5);
+      const hsl = new Color().setHSL(
+        Math.random() * 0.5,
+        0.75,
+        Math.random() * 0.5 + 0.5
+      );
       const color = new Vector4(hsl.r, hsl.g, hsl.b, Maf.randomInRange(1, 4));
       // color.g = color.b = 0;
       const mat = new RawShaderMaterial({
@@ -286,7 +290,7 @@ class Effect extends glEffectBase {
         stripeOffset: { value: Math.PI / 2 }, // Radians.
         stripeColor: { value: new Vector4(0, 0.1, 0.1, 0.1) }, // R G B Intensity
         baseColor: { value: new Vector4(1, 0, 0, 0) }, // R G B Intensity
-        ambient: { value: new Vector4(0.1, 0.1, 0.1, 0) }, // R G B Intensity
+        ambientColor: { value: new Vector4(0.1, 0.1, 0.1, 0) }, // R G B Intensity
       },
       vertexShader: geoVs,
       fragmentShader: geoFs,

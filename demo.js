@@ -45,11 +45,11 @@ geoShaderFolder.add(params, "texScale", 0, 3, 0.01);
 geoShaderFolder.add(params, "stripeFreq", 0, 100, 0.01);
 geoShaderFolder.add(params, "stripeOffset", 0, 2 * Math.PI, 0.01);
 geoShaderFolder.addColor(params, "stripeColor");
-geoShaderFolder.add(params, "stripeColorIntensity", 0, 4, 0.01);
+geoShaderFolder.add(params, "stripeColorIntensity", 0, 10, 0.01);
 geoShaderFolder.addColor(params, "baseColor");
-geoShaderFolder.add(params, "baseColorIntensity", 0, 4, 0.01);
+geoShaderFolder.add(params, "baseColorIntensity", 0, 10, 0.01);
 geoShaderFolder.addColor(params, "ambientColor");
-geoShaderFolder.add(params, "ambientColorIntensity", 0, 4, 0.01);
+geoShaderFolder.add(params, "ambientColorIntensity", 0, 10, 0.01);
 geoShaderFolder.open();
 
 const geometryFolder = gui.addFolder("Geometry");
@@ -113,6 +113,18 @@ function render(t) {
     params.baseColor[1] / 255,
     params.baseColor[2] / 255,
     params.baseColorIntensity
+  );
+  intro.geoShader.uniforms.stripeColor.value.set(
+    params.stripeColor[0] / 255,
+    params.stripeColor[1] / 255,
+    params.stripeColor[2] / 255,
+    params.stripeColorIntensity
+  );
+  intro.geoShader.uniforms.ambientColor.value.set(
+    params.ambientColor[0] / 255,
+    params.ambientColor[1] / 255,
+    params.ambientColor[2] / 255,
+    params.ambientColorIntensity
   );
   intro.geoShader.uniforms.exposureDiffuse.value = params.exposureDiffuse;
   intro.geoShader.uniforms.exposureSpecular.value = params.exposureSpecular;
