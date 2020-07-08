@@ -157,13 +157,13 @@
 				"\t",
 				"\tconst invProgress = 1 - progress;",
 				"",
-				"\tcamera.position.set( 4 - progress * 2, 0, - 7 * invProgress - 5 );",
+				"\tcamera.position.set( 4 - progress * 2, 5, - 7 * invProgress - 2 );",
 				"\t",
 				"\ttarget.x = Math.sin( progress * 4 ) * 2;",
-				"\ttarget.y = Math.cos( progress * 5 );",
-				"\ttarget.z = - 8 * invProgress;",
+				"\ttarget.y = Math.cos( progress * 6 );",
+				"\ttarget.z = - 11 * invProgress + 2;",
 				"\tcamera.lookAt( target );",
-				"\tcamera.rotation.z = - Math.PI / 2;",
+				"\t// camera.rotation.z = - Math.PI / 2;",
 				"",
 				"}"
 			]
@@ -330,38 +330,38 @@
 		{
 			"name": "",
 			"start": 32.972972972972876,
-			"end": 44.00202528109502,
+			"end": 43.93952528109502,
 			"layer": 2,
 			"effectId": 5,
 			"enabled": true
 		},
 		{
 			"name": "",
-			"start": 44,
-			"end": 54.40116149207043,
+			"start": 43.96875,
+			"end": 54.93241149207043,
 			"layer": 1,
 			"effectId": 6,
 			"enabled": true
 		},
 		{
 			"name": "",
-			"start": 54.53004243913334,
-			"end": 65.67277194549924,
+			"start": 54.99879243913334,
+			"end": 65.98527194549924,
 			"layer": 2,
 			"effectId": 5,
 			"enabled": true
 		},
 		{
 			"name": "",
-			"start": 65.65467947286113,
-			"end": 77.11927630109436,
+			"start": 65.96717947286113,
+			"end": 77.01870368900857,
 			"layer": 1,
-			"effectId": 3,
+			"effectId": 6,
 			"enabled": true
 		},
 		{
 			"name": "",
-			"start": 77.13200804109879,
+			"start": 77.02369907423717,
 			"end": 93.29886084431503,
 			"layer": 2,
 			"effectId": 7,
