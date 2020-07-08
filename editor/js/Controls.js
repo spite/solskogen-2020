@@ -14,7 +14,7 @@ function Controls( editor ) {
 	container.add( row );
 
 	var prevButton = new UI.Button();
-	prevButton.setBackground( 'url(files/prev.svg)' );
+	prevButton.setBackground( 'url(./editor/files/prev.svg)' );
 	prevButton.setWidth( '20px' );
 	prevButton.setHeight( '20px' );
 	prevButton.setMarginRight( '4px' );
@@ -27,7 +27,7 @@ function Controls( editor ) {
 	row.add( prevButton );
 
 	var playButton = new UI.Button();
-	playButton.setBackground( 'url(files/play.svg)' );
+	playButton.setBackground( 'url(./editor/files/play.svg)' );
 	playButton.setWidth( '20px' );
 	playButton.setHeight( '20px' );
 	playButton.setMarginRight( '4px' );
@@ -40,7 +40,7 @@ function Controls( editor ) {
 	row.add( playButton );
 
 	var nextButton = new UI.Button();
-	nextButton.setBackground( 'url(files/next.svg)' );
+	nextButton.setBackground( 'url(./editor/files/next.svg)' );
 	nextButton.setWidth( '20px' );
 	nextButton.setHeight( '20px' );
 	nextButton.setMarginRight( '4px' );
@@ -96,7 +96,7 @@ function Controls( editor ) {
 	}
 
 	var fullscreenButton = new UI.Button();
-	fullscreenButton.setBackground( 'url(files/fullscreen.svg)' );
+	fullscreenButton.setBackground( 'url(./editor/files/fullscreen.svg)' );
 	fullscreenButton.setWidth( '20px' );
 	fullscreenButton.setHeight( '20px' );
 	fullscreenButton.setFloat( 'right' );
@@ -112,7 +112,7 @@ function Controls( editor ) {
 
 	signals.playingChanged.add( function ( isPlaying ) {
 
-		playButton.setBackground( isPlaying ? 'url(files/pause.svg)' : 'url(files/play.svg)' )
+		playButton.setBackground( isPlaying ? 'url(./editor/files/pause.svg)' : 'url(./editor/files/play.svg)' )
 
 	} );
 

@@ -47,7 +47,7 @@
 
 		<script type="module">
 
-			import { Resources, Player, Timeline } from './editor/Frame.js';
+			import { Resources, Player, Timeline } from './js/Frame.js';
 
 			const resources = new Resources();
 			resources.set( 'dom', document.getElementById( 'container' ) );
@@ -55,7 +55,7 @@
 			const timeline = new Timeline();
 			const player = new Player();
 
-			load( './editor/script.json' );
+			load( './script.json' );
 
 			//
 

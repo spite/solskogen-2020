@@ -6,25 +6,25 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	</head>
 	<body ontouchstart="">
-		<link href="./css/main.css" rel="stylesheet" />
-		<link id="theme" href="./css/dark.css" rel="stylesheet" />
+		<link href="./editor/css/main.css" rel="stylesheet" />
+		<link id="theme" href="./editor/css/dark.css" rel="stylesheet" />
 
-		<link rel="stylesheet" href="./js/libs/codemirror/codemirror.css">
-		<link rel="stylesheet" href="./js/libs/codemirror/theme/monokai.css">
-		<script src="./js/libs/codemirror/codemirror.js"></script>
-		<script src="./js/libs/codemirror/mode/javascript.js"></script>
+		<link rel="stylesheet" href="./editor/js/libs/codemirror/codemirror.css">
+		<link rel="stylesheet" href="./editor/js/libs/codemirror/theme/monokai.css">
+		<script src="./editor/js/libs/codemirror/codemirror.js"></script>
+		<script src="./editor/js/libs/codemirror/mode/javascript.js"></script>
 
-		<link rel="stylesheet" href="./js/libs/codemirror/addon/dialog/dialog.css">
-		<link rel="stylesheet" href="./js/libs/codemirror/addon/search/matchesonscrollbar.css">
-		<script src="./js/libs/codemirror/addon/dialog/dialog.js"></script>
-		<script src="./js/libs/codemirror/addon/search/searchcursor.js"></script>
-		<script src="./js/libs/codemirror/addon/search/search.js"></script>
-		<script src="./js/libs/codemirror/addon/scroll/annotatescrollbar.js"></script>
-		<script src="./js/libs/codemirror/addon/search/matchesonscrollbar.js"></script>
-		<script src="./js/libs/codemirror/addon/search/jump-to-line.js"></script>
+		<link rel="stylesheet" href="./editor/js/libs/codemirror/addon/dialog/dialog.css">
+		<link rel="stylesheet" href="./editor/js/libs/codemirror/addon/search/matchesonscrollbar.css">
+		<script src="./editor/js/libs/codemirror/addon/dialog/dialog.js"></script>
+		<script src="./editor/js/libs/codemirror/addon/search/searchcursor.js"></script>
+		<script src="./editor/js/libs/codemirror/addon/search/search.js"></script>
+		<script src="./editor/js/libs/codemirror/addon/scroll/annotatescrollbar.js"></script>
+		<script src="./editor/js/libs/codemirror/addon/search/matchesonscrollbar.js"></script>
+		<script src="./editor/js/libs/codemirror/addon/search/jump-to-line.js"></script>
 
-		<script src="./js/libs/signals.min.js"></script>
-		<script src="./js/libs/ui.js"></script>
+		<script src="./editor/js/libs/signals.min.js"></script>
+		<script src="./editor/js/libs/ui.js"></script>
 
 		<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.8.3/dist/ffmpeg.min.js" defer></script>
 
@@ -34,13 +34,13 @@
 
 		<script type="module">
 
-			import { Editor } from './js/Editor.js';
-			import { Viewport } from './js/Viewport.js';
-			import { Code } from './js/Code.js';
-			import { Sidebar } from './js/Sidebar.js';
-			import { Controls } from './js/Controls.js';
-			import { Timeline } from './js/Timeline.js';
-			import { Menubar } from './js/Menubar.js';
+			import { Editor } from './editor/js/Editor.js';
+			import { Viewport } from './editor/js/Viewport.js';
+			import { Code } from './editor/js/Code.js';
+			import { Sidebar } from './editor/js/Sidebar.js';
+			import { Controls } from './editor/js/Controls.js';
+			import { Timeline } from './editor/js/Timeline.js';
+			import { Menubar } from './editor/js/Menubar.js';
 
 			var editor = new Editor();
 
