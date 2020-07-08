@@ -275,18 +275,18 @@ float map (vec3 p, float t) {
   //float d = displacement(pp);
   //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
   float icosa = fIcosahedron(pp, 1., 50.);
-  //return icosa;
+  return icosa;
   float dodeca = fDodecahedron(pp, 1., 50.);
   //return dodeca;
   //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
   float octa = sdOctahedron(pp, 1.25) - .1;
   //return octa;
-  float sphere = sdSphere(p, 1.);
+  float sphere = sdSphere(p, 1.1);
   //return sphere;
   //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
   float tetra = sdTetrahedron(pp, 1.) - .1;
   //return tetra;
-  return  opSmoothUnion(icosa, dodeca, .05);
+  return  opSmoothUnion(sphere, dodeca, .05);
   //return opSmoothIntersection(dodeca, icosa, .5);
   return sdPyramid(pp, 1., .75) - .1;
 }
@@ -325,7 +325,7 @@ void main () {
   float d = march( ro, rd, 0. );
   vec3 p = ro + d * rd;
   vec3 nm = calcNormal (p, 0.);
-  nm *= -1.;
+  //nm *= -1.;
 
   vPosition = modelViewMatrix * vec4( p, 1.0 );
   gl_Position = projectionMatrix * vPosition;
@@ -335,7 +335,7 @@ void main () {
 
   vEye = ( modelViewMatrix * vec4( p, 1.0 ) ).xyz;
   vNormal = normalMatrix * nm;
-  vONormal =  nm;
+  vONormal = nm;
 
   v_worldPosition = (modelMatrix * vec4(p,1.)).xyz;
   v_worldNormal = mat3(modelMatrix) * nm;

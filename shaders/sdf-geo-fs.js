@@ -92,7 +92,7 @@ void main() {
                       bump2 * blend_weights.yyy +  
                       bump3 * blend_weights.zzz;
 
-  vec3 tn = v_worldNormal;                   
+  vec3 tn = vNormal;                   
   vec3 tanX = vec3(  tn.x, -tn.z,  tn.y );
   vec3 tanY = vec3(  tn.z,  tn.y, -tn.x );
   vec3 tanZ = vec3( -tn.y,  tn.x,  tn.z );
@@ -103,11 +103,15 @@ void main() {
   float normalScale = .5;
   vec3 normalTex = blended_bump * 2.0 - 1.0;
   normalTex.xy *= normalScale;
+  //normalTex = vec3(0.,0.,1.);
   normalTex = normalize( normalTex );
- // normalTex = vec3(0.,0.,1.);
-  mat3 tsb = mat3( normalize( blended_tangent ), normalize( cross( vNormal, blended_tangent ) ), normalize( vNormal ) );
+  vec3 tt = normalMatrix * blended_tangent;
+  mat3 tsb = mat3( normalize( tt ), normalize( cross( v_worldNormal, tt ) ), normalize( v_worldNormal ) );
   vec3 finalNormal = tsb * normalTex;
   
+  //gl_FragColor = vec4(finalNormal, 1.);
+  //return;
+
   float rimPower = 4.;
   float useRim = 1.;
   float f = rimPower * abs( dot( finalNormal, normalize( vEye ) ) );
@@ -125,12 +129,13 @@ void main() {
 
   mat3 tbn = cotangent_frame(v_worldPosition, v_worldNormal, v_worldPosition.xy);
 
-  vec3 dNormal = .1*finalNormal;//.1 * normalTex;
-  vec3 fn = normalize(v_worldNormal +.1 * tbn*normalTex);
+  vec3 dNormal =vec3(0.);// .1*finalNormal;//.1 * normalTex;
+  vec3 fn = finalNormal;// +.1 * tbn*normalTex);
+
   vec4 refDiff = vec4(0.);
   refDiff += 1.* textureCubeLodEXT(envMap, fn, roughness * 4.);
-  gl_FragColor += refDiff * exposure;
-  
+  gl_FragColor = refDiff * exposure;
+  //return;
   vec4 refSpec = vec4(0.);
   vec3 worldNormal = fn;//normalize(v_worldNormal + dNormal);
   vec3 eyeToSurfaceDir = normalize(v_worldPosition - cameraPosition);

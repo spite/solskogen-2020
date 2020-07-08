@@ -25,6 +25,7 @@ import {
   TorusBufferGeometry,
   Color,
   FloatType,
+  HalfFloatType,
   UnsignedByteType,
 } from "../third_party/three.module.js";
 import { ShaderPass } from "../js/ShaderPass.js";
@@ -145,7 +146,7 @@ const scrap = {
   normal: "scrap-normal.png",
   specular: "scrap-specular.png",
 };
-const mat = scrap;
+const mat = concrete; //scrap;
 
 const loader = new TextureLoader();
 const matCapTex = loader.load("../assets/matcap.jpg");
@@ -242,7 +243,7 @@ class Effect extends glEffectBase {
     }
     this.scene.add(this.ring2);
 
-    this.cubeRenderTarget = new WebGLCubeRenderTarget(512, {
+    this.cubeRenderTarget = new WebGLCubeRenderTarget(1024, {
       format: RGBAFormat,
       type: FloatType,
       generateMipmaps: true,
@@ -260,8 +261,8 @@ class Effect extends glEffectBase {
         textureMap: { value: diffuse },
         normalMap: { value: normal },
         specularMap: { value: specular },
-        exposure: { value: 1 },
-        roughness: { value: 1 },
+        exposure: { value: 0.5 },
+        roughness: { value: 2 },
       },
       vertexShader: geoVs,
       fragmentShader: geoFs,
@@ -303,7 +304,7 @@ class Effect extends glEffectBase {
 
   render(t) {
     const speed = 10;
-    const spread = 100;
+    const spread = 50;
     for (const m of this.ring1.children) {
       m.position.z =
         ((m.userData.offset * spread + speed * m.userData.factor * t) %

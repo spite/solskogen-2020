@@ -62,7 +62,7 @@ window.promises = [];
 
 async function init() {
   console.log("Loading...");
-  const preload = [audioPromise];
+  const preload = []; //[audioPromise];
   for (const effect of effects) {
     preload.push(effect.initialise());
   }
@@ -71,13 +71,15 @@ async function init() {
   loading.style.display = "none";
   start.style.display = "flex";
   console.log("Ready...");
-  //run();
+  run();
 }
 
 function run() {
   start.style.display = "none";
   console.log("Start");
-  audio.play();
+  //audio.play();
+  //audio.controls = true;
+  //document.body.append(audio);
   render();
 }
 
