@@ -156,9 +156,9 @@ const concrete = {
 };
 
 const water = {
-  diffuse: "Wavy_Water - Color Map.png",
-  normal: "Wavy_Water - Height (Normal Map).png",
-  specular: "Wavy_Water - specular.png",
+  diffuse: "water-diffuse.png",
+  normal: "water-normal.png",
+  specular: "water-specular.png",
 };
 
 const slate = {
