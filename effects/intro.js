@@ -189,7 +189,7 @@ class Effect extends glEffectBase {
     super.initialise();
 
     this.ring1 = new Group();
-    const geo = new CylinderBufferGeometry(1, 1, 1, 3).rotateX(-Math.PI / 2);
+    const geo = new CylinderBufferGeometry(1, 1, 1, 16).rotateX(-Math.PI / 2);
     for (let j = 0; j < 100; j++) {
       const hsl = new Color().setHSL(Math.random() * 0.5, 0.75, 0.25);
       const color = new Vector4(hsl.r, hsl.g, hsl.b, Maf.randomInRange(1, 4));
@@ -200,7 +200,7 @@ class Effect extends glEffectBase {
         fragmentShader: neonFs,
       });
       const h = Maf.randomInRange(0.1, 10);
-      const s = Maf.randomInRange(0.01, 0.1);
+      const s = Maf.randomInRange(0.01, 0.075);
       const mesh = new Mesh(geo, mat);
 
       const a = Maf.randomInRange(0, Maf.TAU);
