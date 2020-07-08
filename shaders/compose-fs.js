@@ -16,7 +16,8 @@ varying vec2 v_rgbM;
 ${FXAA}
 
 void main() {
-  gl_FragColor = fxaa(fbo, vUv * resolution, resolution, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);
+  vec2 uv2 = (vUv -.5 ) * .9 + .5;
+  gl_FragColor = fxaa(fbo, uv2 * resolution, resolution, v_rgbNW, v_rgbNE, v_rgbSW, v_rgbSE, v_rgbM);
 }
 `;
 

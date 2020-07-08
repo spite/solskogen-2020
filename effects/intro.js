@@ -181,10 +181,10 @@ const scrap = {
 const mat = water; //concrete; //scrap;
 
 const loader = new TextureLoader();
-const matCapTex = loader.load("../assets/matcap.jpg");
-const diffuse = loader.load(`../assets/${mat.diffuse}`);
-const normal = loader.load(`../assets/${mat.normal}`);
-const specular = loader.load(`../assets/${mat.specular}`);
+const matCapTex = loader.load("./assets/matcap.jpg");
+const diffuse = loader.load(`./assets/${mat.diffuse}`);
+const normal = loader.load(`./assets/${mat.normal}`);
+const specular = loader.load(`./assets/${mat.specular}`);
 
 matCapTex.wrapS = matCapTex.wrapT = ClampToEdgeWrapping;
 diffuse.wrapS = diffuse.wrapT = RepeatWrapping;
