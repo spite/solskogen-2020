@@ -6,6 +6,7 @@ import {
   Vector2,
   Object3D,
   Matrix4,
+  CylinderBufferGeometry,
   BoxBufferGeometry,
   BufferAttribute,
   MeshNormalMaterial,
@@ -188,11 +189,11 @@ class Effect extends glEffectBase {
     super.initialise();
 
     this.ring1 = new Group();
+    const geo = new CylinderBufferGeometry(1, 1, 1, 3).rotateX(-Math.PI/2);
     for (let j = 0; j < 100; j++) {
+      const hsl = new Color().setHSL(Math.random()*0.5, 0.75, 0.25);
       const color = new Vector4(
-        Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(0.5, 1),
-        Maf.randomInRange(0.5, 1),
+        hsl.r, hsl.g, hsl.b,
         Maf.randomInRange(1, 4)
       );
       // color.g = color.b = 0;
@@ -203,13 +204,17 @@ class Effect extends glEffectBase {
       });
       const h = Maf.randomInRange(0.1, 10);
       const s = Maf.randomInRange(0.01, 0.1);
-      const geo = new BoxBufferGeometry(s, s, h);
       const mesh = new Mesh(geo, mat);
+
       const a = Maf.randomInRange(0, Maf.TAU);
       const r = Maf.randomInRange(2, 8);
       mesh.position.x = r * Math.cos(a);
       mesh.position.y = r * Math.sin(a);
       mesh.position.z = Maf.randomInRange(-50, 50);
+      mesh.rotation.z = Math.random();
+      mesh.scale.x = s;
+      mesh.scale.y = s;
+      mesh.scale.z = h;
       mesh.userData.offset = Maf.randomInRange(0, 1);
       mesh.userData.factor = Maf.randomInRange(0.5, 1.5);
       this.ring1.add(mesh);
@@ -232,7 +237,7 @@ class Effect extends glEffectBase {
       });
       const r = Maf.randomInRange(10, 20);
       const r2 = Maf.randomInRange(0.01, 2);
-      const geo = new TorusBufferGeometry(r, r2, 3, 72);
+      const geo = new TorusBufferGeometry(r, r2, 3, 5);
       const mesh = new Mesh(geo, mat);
       mesh.position.x = 0;
       mesh.position.y = 0;
