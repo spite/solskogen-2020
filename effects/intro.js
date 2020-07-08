@@ -264,6 +264,14 @@ class Effect extends glEffectBase {
         normalMap: { value: normal },
         specularMap: { value: specular },
 
+        smoothness: { value: 0.05 },
+        tetrahedronFactor: { value: 0 },
+        cubeFactor: { value: 0 },
+        octahedronFactor: { value: 0 },
+        dodecahedronFactor: { value: 0 },
+        icosahedronFactor: { value: 0 },
+        sphereFactor: { value: 0 },
+
         exposureDiffuse: { value: 0.5 }, // Exposure of diffuse lighting.
         exposureSpecular: { value: 0.5 }, // Exposure of specular lighting.
         roughness: { value: 2 }, // Roughness (bias of texture lookup)
@@ -280,7 +288,7 @@ class Effect extends glEffectBase {
       wireframe: !true,
     });
 
-    const geometry = new IcosahedronBufferGeometry(2, 7);
+    const geometry = new IcosahedronBufferGeometry(4, 7);
     this.mesh = new Mesh(geometry, this.geoShader);
     this.scene.add(this.mesh);
 

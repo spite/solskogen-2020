@@ -7,6 +7,14 @@ import * as dat from "./third_party/dat.gui.module.js";
 const gui = new dat.GUI();
 
 const params = new (function () {
+  this.tetrahedronFactor = 1;
+  this.cubeFactor = 0;
+  this.octahedronFactor = 0;
+  this.dodecahedronFactor = 0;
+  this.icosahedronFactor = 0;
+  this.sphereFactor = 0;
+  this.smoothness = 0.05;
+
   this.exposureDiffuse = 0.5;
   this.exposureSpecular = 0.5;
   this.roughness = 2;
@@ -29,8 +37,17 @@ geoShaderFolder.add(params, "normalScale", 0, 1);
 geoShaderFolder.add(params, "texScale", 0, 3);
 geoShaderFolder.add(params, "stripeFreq", 0, 100);
 geoShaderFolder.add(params, "stripeOffset", 0, 2 * Math.PI);
+geoShaderFolder.open();
 
 const geometryFolder = gui.addFolder("Geometry");
+geometryFolder.add(params, "smoothness", 0.02, 1);
+geometryFolder.add(params, "tetrahedronFactor", 0, 2);
+geometryFolder.add(params, "cubeFactor", 0, 2);
+geometryFolder.add(params, "octahedronFactor", 0, 2);
+geometryFolder.add(params, "dodecahedronFactor", 0, 2);
+geometryFolder.add(params, "icosahedronFactor", 0, 2);
+geometryFolder.add(params, "sphereFactor", 0, 2);
+geometryFolder.open();
 
 const postFolder = gui.addFolder("Post");
 postFolder.add(params, "blurExposure", 0, 3);
@@ -66,6 +83,14 @@ start.addEventListener("click", () => {
 });
 
 function render(t) {
+  intro.geoShader.uniforms.smoothness.value = params.smoothness;
+  intro.geoShader.uniforms.tetrahedronFactor.value = params.tetrahedronFactor;
+  intro.geoShader.uniforms.cubeFactor.value = params.cubeFactor;
+  intro.geoShader.uniforms.octahedronFactor.value = params.octahedronFactor;
+  intro.geoShader.uniforms.icosahedronFactor.value = params.icosahedronFactor;
+  intro.geoShader.uniforms.dodecahedronFactor.value = params.dodecahedronFactor;
+  intro.geoShader.uniforms.sphereFactor.value = params.sphereFactor;
+
   intro.geoShader.uniforms.exposureDiffuse.value = params.exposureDiffuse;
   intro.geoShader.uniforms.exposureSpecular.value = params.exposureSpecular;
   intro.geoShader.uniforms.roughness.value = params.roughness;

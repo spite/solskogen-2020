@@ -11,6 +11,14 @@ uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat3 normalMatrix;
 
+uniform float tetrahedronFactor;
+uniform float cubeFactor;
+uniform float octahedronFactor;
+uniform float icosahedronFactor;
+uniform float dodecahedronFactor;
+uniform float sphereFactor;
+uniform float smoothness;
+
 uniform float time;
 
 varying vec3 vNormal;
@@ -77,81 +85,19 @@ float udRoundBox( vec3 p, vec3 b, float r ) {
   return length(max(abs(p)-b,0.0))-r;
 }
 
-float sdCylinder( vec3 p, vec3 c )
-{
-  return length(p.xz-c.xy)-c.z;
-}
-
-float sdCappedCylinder( vec3 p, float h, float r )
-{
-  vec2 d = abs(vec2(length(p.xz),p.y)) - vec2(h,r);
-  return min(max(d.x,d.y),0.0) + length(max(d,0.0));
-}
-
-
-float sdPyramid( in vec3 p, in float bs, in float h )
-{
-    // box adjust
-    p.y += h;
-    vec3 p2 = p;
-    h*=2.0;
-    bs*=2.0;
-    h/=bs;
-    p/=bs;
-    
-    float m2 = h*h + 0.25;
-    
-    // symmetry
-    p.xz = abs(p.xz); // do p=abs(p) instead for double pyramid
-    p.xz = (p.z>p.x) ? p.zx : p.xz;
-    p.xz -= 0.5;
-	
-    // project into face plane (2D)
-    vec3 q = vec3( p.z, h*p.y-0.5*p.x, h*p.x+0.5*p.y);
-        
-    float s = max(-q.x,0.0);
-    float t = clamp( (q.y-0.5*q.x)/(m2+0.25), 0.0, 1.0 );
-    
-    float a = m2*(q.x+s)*(q.x+s) + q.y*q.y;
-	float b = m2*(q.x+0.5*t)*(q.x+0.5*t) + (q.y-m2*t)*(q.y-m2*t);
-    
-    float d2 = max(-q.y,q.x*m2+q.y*0.5) < 0.0 ? 0.0 : min(a,b);
-    
-    // recover 3D and scale, and add sign
-    float d = sqrt( (d2+q.z*q.z)/m2 ) * sign(max(q.z,-p.y));
-    
-    // adjust distance for scale
-    //return bs*d;
-    
-    // hacked on the base
-    vec2 fx = abs(p2.xz)-vec2(bs*0.5);
-    float d1 = length(max(fx,0.0)) + min(max(fx.x,fx.y),0.0);
-	vec2 w = vec2( d1, abs(p2.y) - 0.0001 );
-    d1= min(max(w.x,w.y),0.0) + length(max(w,0.0));    
-    return min(d1,bs*d);
-    
-}
-
-
 float dot2( in vec3 v ) { return dot(v,v); }
-
 float sdTetrahedron(vec3 p, float size)
 {
     const float k = sqrt(2.0);
-
-    p *= size;
-
+    p /= size;
     p.xz = abs(p.xz);
     
     float m = 2.0*p.z - k*p.y - 1.0;
-
     p = (m>0.0) ? p : vec3(p.z,-p.y,p.x);
-
     float s1 = clamp(p.x,0.0,1.0);
     float s2 = clamp((p.x-p.y*k-p.z+2.0)/4.0,0.0,1.0);
     
     m = 2.0*p.z - k*p.y - 1.0;
-
     float d = sign(m)*sqrt((sign(p.y*k+p.z+1.0)+sign(2.0-3.0*p.x-k*p.y-p.z)<1.0) 
                   ?
                   min( dot2(vec3(s1,-k*0.5,0)-p), 
@@ -159,9 +105,8 @@ float sdTetrahedron(vec3 p, float size)
                   :
                   m*m/6.0 );
     
-    return d / size;
+    return d * size;
 }
-
 
 float opSmoothUnion( float d1, float d2, float k ) {
   float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
@@ -269,24 +214,37 @@ float fIcosahedron(vec3 p, float r, float e) {
 
 float map (vec3 p, float t) {
   vec3 pp = p;// opTwist( p );
-  //float d = displacement(pp);
-  //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
-  float icosa = fIcosahedron(pp, 1., 50.);
-  //return icosa;
-  float dodeca = fDodecahedron(pp, 1., 50.);
-  //return dodeca;
-  //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
-  float octa = sdOctahedron(pp, 1.25) - .1;
-  //return octa;
-  float sphere = sdSphere(p, 1.1);
-  return sphere;
-  //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
-  float tetra = sdTetrahedron(pp, 1.) - .1;
-  //return tetra;
-  //return  opSmoothUnion(icosa, dodeca, .05);
-  return  opSmoothUnion(sphere, dodeca, .05);
-  //return opSmoothIntersection(dodeca, icosa, .5);
-  return sdPyramid(pp, 1., .75) - .1;
+  float tetra = sdTetrahedron(pp, max(.0001,tetrahedronFactor)) - .1;
+  float cube = sdRoundBox(pp, vec3(cubeFactor), .05);
+  float octa = sdOctahedron(pp, 1.25 * octahedronFactor) - .1;
+  float icosa = fIcosahedron(pp, 1. * icosahedronFactor, 50.);
+  float dodeca = fDodecahedron(pp, 1. * dodecahedronFactor, 50.);
+  float sphere = sdSphere(pp, sphereFactor);
+  float a = opSmoothUnion(tetra,cube, smoothness);
+  a = opSmoothUnion(a, octa, smoothness);
+  a = opSmoothUnion(a, icosa, smoothness);
+  a = opSmoothUnion(a, dodeca, smoothness);
+  a = opSmoothUnion(a, sphere, smoothness);
+  return a;
+  
+  // //float d = displacement(pp);
+  // //return d + ( sdCappedCylinder(pp, 1., .5) - .1);
+  // float icosa = fIcosahedron(pp, 1., 50.);
+  // //return icosa;
+  // float dodeca = fDodecahedron(pp, 1., 50.);
+  // //return dodeca;
+  // //float pyramid =  sdPyramid(pp, 1., 2.) - .1;
+  // float octa = sdOctahedron(pp, 1.25) - .1;
+  // //return octa;
+  // float sphere = sdSphere(p, 1.1);
+  // return sphere;
+  // //return sdRoundBox(pp, vec3(.5,.5,.5), .05);
+  // float tetra = sdTetrahedron(pp, 1.) - .1;
+  // //return tetra;
+  // //return  opSmoothUnion(icosa, dodeca, .05);
+  // return  opSmoothUnion(sphere, dodeca, .05);
+  // //return opSmoothIntersection(dodeca, icosa, .5);
+  // return sdPyramid(pp, 1., .75) - .1;
 }
 
 vec3 calcNormal (vec3 p, float t) {
