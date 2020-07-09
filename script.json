@@ -547,7 +547,7 @@
 				"",
 				"function update( progress ){",
 				"\t",
-				"\tshape.uniforms.baseColor.value.x = progress;",
+				"\tshape.uniforms.baseColor.value.x = 0;",
 				"\tshape.uniforms.baseColor.value.y = 0;",
 				"\tshape.uniforms.baseColor.value.z = 1;",
 				"",
