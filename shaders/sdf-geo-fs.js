@@ -6,7 +6,6 @@ precision highp float;
 
 uniform sampler2D textureMap;
 uniform sampler2D normalMap;
-uniform sampler2D matCapMap;
 uniform sampler2D specularMap;
 
 uniform mat3 normalMatrix;

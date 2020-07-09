@@ -134,7 +134,7 @@ const shader = new RawShaderMaterial({
     resolution: { value: new Vector2(1, 1) },
     radius: { value: 1 },
     strength: { value: 1 },
-    exposure: { value: 1 },
+    exposure: { value: 0 },
   },
   vertexShader,
   fragmentShader,
@@ -181,12 +181,10 @@ const scrap = {
 const mat = water; //concrete; //scrap;
 
 const loader = new TextureLoader();
-const matCapTex = loader.load("./assets/matcap.jpg");
 const diffuse = loader.load(`./assets/${mat.diffuse}`);
 const normal = loader.load(`./assets/${mat.normal}`);
 const specular = loader.load(`./assets/${mat.specular}`);
 
-matCapTex.wrapS = matCapTex.wrapT = ClampToEdgeWrapping;
 diffuse.wrapS = diffuse.wrapT = RepeatWrapping;
 normal.wrapS = normal.wrapT = RepeatWrapping;
 specular.wrapS = specular.wrapT = RepeatWrapping;
@@ -297,7 +295,6 @@ class Effect extends glEffectBase {
     this.geoShader = new RawShaderMaterial({
       uniforms: {
         time: { value: 0 },
-        matCapMap: { value: matCapTex },
         envMap: { value: this.cubeRenderTarget.texture },
         textureMap: { value: diffuse },
         normalMap: { value: normal },
