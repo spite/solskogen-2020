@@ -270,7 +270,7 @@ class Effect extends glEffectBase {
         fragmentShader: neonFs,
       });
       const r = Maf.randomInRange(10, 20);
-      const r2 = Maf.randomInRange(0.01, 2);
+      const r2 = Maf.randomInRange(0.5, 1.5);
       const geo = new TorusBufferGeometry(r, r2, 3, 5);
       const mesh = new Mesh(geo, mat);
       mesh.position.x = 0;
