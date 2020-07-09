@@ -531,7 +531,7 @@
 				"\t",
 				"\tshape.uniforms.baseColor.value.x = 0;",
 				"\tshape.uniforms.baseColor.value.y = 0;",
-				"\tshape.uniforms.baseColor.value.z = 1;",
+				"\tshape.uniforms.baseColor.value.z = 2;",
 				"",
 				"\t",
 				"}"
