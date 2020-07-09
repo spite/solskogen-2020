@@ -112,8 +112,10 @@
         loading.textContent = "Play";
         playOverlay.style.display = "flex";
 
-        playOverlay.addEventListener("click", function () {
+        playOverlay.addEventListener("click", async () => {
           info.style.display = "none";
+
+          await container.requestFullscreen();
 
           player.play();
 
