@@ -125,7 +125,7 @@
 				"",
 				"function update( progress ){",
 				"",
-				"\trender( progress * 140 );",
+				"\trender( progress * 150 );",
 				"",
 				"}"
 			]
@@ -497,24 +497,6 @@
 			]
 		},
 		{
-			"name": "Flashes",
-			"source": [
-				"const shape = resources.get( 'shape' );",
-				"",
-				"function start(){}",
-				"",
-				"function end(){}",
-				"",
-				"function update( progress ){",
-				"",
-				"\tconst length = 0.677;",
-				"\tconst amount = ( length - ( player.currentTime % length ) ) * 10 + 1;",
-				"\tshape.uniforms.baseColor.value.w = amount;",
-				"",
-				"}"
-			]
-		},
-		{
 			"name": "Roughness",
 			"source": [
 				"const shape = resources.get( 'shape' );",
@@ -631,7 +613,7 @@
 			"start": 0,
 			"end": 93.32352941176474,
 			"layer": 7,
-			"effectId": 18,
+			"effectId": 17,
 			"enabled": true
 		},
 		{
@@ -639,7 +621,7 @@
 			"start": 0,
 			"end": 93.32,
 			"layer": 8,
-			"effectId": 19,
+			"effectId": 18,
 			"enabled": true
 		},
 		{
@@ -672,14 +654,6 @@
 			"end": 32.89155350639713,
 			"layer": 1,
 			"effectId": 4,
-			"enabled": true
-		},
-		{
-			"name": "",
-			"start": 32.89405487804878,
-			"end": 76.77640781922523,
-			"layer": 9,
-			"effectId": 17,
 			"enabled": true
 		},
 		{
@@ -735,7 +709,7 @@
 			"start": 58.8125,
 			"end": 60.0625,
 			"layer": 3,
-			"effectId": 20,
+			"effectId": 19,
 			"enabled": true
 		},
 		{
@@ -743,7 +717,7 @@
 			"start": 64.28125,
 			"end": 65.53125,
 			"layer": 3,
-			"effectId": 20,
+			"effectId": 19,
 			"enabled": true
 		},
 		{
