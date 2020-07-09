@@ -96,6 +96,12 @@
 
 				editor.fromJSON( JSON.parse( state ) );
 
+			} else {
+
+				fetch( './script.json' )
+					.then( response => response.json() )
+					.then( data => editor.fromJSON( data ) );
+
 			}
 
 			// Short-cuts
