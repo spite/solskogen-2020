@@ -125,7 +125,7 @@
 				"",
 				"function update( progress ){",
 				"",
-				"\trender( progress * 150 );",
+				"\trender( progress * 200 );",
 				"",
 				"}"
 			]
@@ -642,8 +642,8 @@
 		},
 		{
 			"name": "",
-			"start": 20.15625,
-			"end": 21.78125,
+			"start": 20.5625,
+			"end": 22,
 			"layer": 4,
 			"effectId": 9,
 			"enabled": true
