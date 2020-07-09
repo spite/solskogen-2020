@@ -32,7 +32,7 @@ function SidebarRender( editor ) {
 	var videoDurationRow = new UI.Row();
 	videoDurationRow.add( new UI.Text( 'Duration' ).setWidth( '90px' ) );
 
-	var videoDuration = new UI.Integer( 70 );
+	var videoDuration = new UI.Integer( 93 );
 	videoDurationRow.add( videoDuration );
 
 	container.add( videoDurationRow );
@@ -55,11 +55,14 @@ function SidebarRender( editor ) {
 		const player = editor.player;
 		const resources = editor.resources;
 
-		const renderer = resources.get( 'renderer' );
-		renderer.setPixelRatio( 1 );
-		renderer.setSize( videoWidth.getValue(), videoHeight.getValue() );
+		const dom = resources.get( 'dom' );
+		dom.style.width = videoWidth.getValue() + 'px';
+		dom.style.height = videoHeight.getValue() + 'px';
 
-		const element = renderer.domElement;
+		window.devicePixelRatio = 1; // lol
+		window.dispatchEvent( new Event( 'resize' ) ); // lol
+
+		const element = dom.firstChild;
 		const audio = player.getAudio();
 
 		//
