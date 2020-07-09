@@ -103,7 +103,7 @@
 				"",
 				"\t\tintro.final.shader.uniforms.radius.value = 1.0;",
 				"\t\tintro.blurStrength = 1.0;",
-				"\t\tintro.final.shader.uniforms.exposure.value = 1.0;",
+				"\t\tintro.final.shader.uniforms.exposure.value = 0.75;",
 				"\t}",
 				"}",
 				"",
@@ -508,7 +508,7 @@
 				"function update( progress ){",
 				"",
 				"\tconst length = 0.677;",
-				"\tconst amount = ( length - ( player.currentTime % length ) ) * 3;",
+				"\tconst amount = ( length - ( player.currentTime % length ) ) * 10 + 1;",
 				"\tshape.uniforms.baseColor.value.w = amount;",
 				"",
 				"}"
@@ -546,10 +546,40 @@
 				"function end(){}",
 				"",
 				"function update( progress ){",
-				"",
-				"\tshape.uniforms.baseColor.value.x = progress;",
+				"\t",
+				"\tshape.uniforms.baseColor.value.x = 0;",
 				"\tshape.uniforms.baseColor.value.y = 0;",
 				"\tshape.uniforms.baseColor.value.z = 1;",
+				"",
+				"\t",
+				"}"
+			]
+		},
+		{
+			"name": "Wiggy wiggy",
+			"source": [
+				"const shape = resources.get( 'shape' );",
+				"",
+				"function start(){",
+				"",
+				"\tshape.uniforms.stripeColor.value.x = 0;",
+				"\tshape.uniforms.stripeColor.value.y = 0;",
+				"\tshape.uniforms.stripeColor.value.z = 0;",
+				"",
+				"}",
+				"",
+				"function end(){",
+				"",
+				"\tshape.uniforms.stripeColor.value.x = 0;",
+				"\tshape.uniforms.stripeColor.value.y = 0;",
+				"\tshape.uniforms.stripeColor.value.z = 0;",
+				"",
+				"}",
+				"",
+				"function update( progress ){",
+				"",
+				"\tshape.uniforms.stripeFreq.value = 9;",
+				"\tshape.uniforms.stripeColor.value.x = Math.abs( Math.sin( progress * Math.PI * 4 ) ) * 5;",
 				"",
 				"}"
 			]
@@ -698,6 +728,22 @@
 			"end": 58.4375,
 			"layer": 4,
 			"effectId": 13,
+			"enabled": true
+		},
+		{
+			"name": "",
+			"start": 58.8125,
+			"end": 60.0625,
+			"layer": 3,
+			"effectId": 20,
+			"enabled": true
+		},
+		{
+			"name": "",
+			"start": 64.28125,
+			"end": 65.53125,
+			"layer": 3,
+			"effectId": 20,
 			"enabled": true
 		},
 		{
