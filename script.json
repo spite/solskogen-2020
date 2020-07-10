@@ -310,6 +310,7 @@
 				"",
 				"function update( progress ){",
 				"",
+				"\tshape.uniforms.smoothness.value = 0.0;",
 				"\tshape.uniforms.tetrahedronFactor.value = 1.0;",
 				"}"
 			]
@@ -507,8 +508,7 @@
 				"\tshape.uniforms.baseColor.value.x = 0;",
 				"\tshape.uniforms.baseColor.value.y = 0;",
 				"\tshape.uniforms.baseColor.value.z = 2;",
-				"\t",
-				"\tshape.uniforms.smoothness.value = progress;",
+				"",
 				"\tshape.uniforms.roughness.value = invProgress;",
 				"\tshape.uniforms.normalScale.value = invProgress;",
 				"\t",
@@ -568,7 +568,7 @@
 		{
 			"name": "",
 			"start": 0,
-			"end": 93.28125,
+			"end": 93.3,
 			"layer": 0,
 			"effectId": 1,
 			"enabled": true
