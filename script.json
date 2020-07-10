@@ -296,7 +296,7 @@
 			]
 		},
 		{
-			"name": "Shape Sphere",
+			"name": "Tetrahedron",
 			"source": [
 				"const shape = resources.get( 'shape' );",
 				"",
@@ -492,7 +492,7 @@
 			]
 		},
 		{
-			"name": "Roughness",
+			"name": "Material",
 			"source": [
 				"const shape = resources.get( 'shape' );",
 				"",
@@ -503,31 +503,16 @@
 				"function update( progress ){",
 				"\t",
 				"\tconst invProgress = 1.0 - progress;",
-				"",
+				"\t",
+				"\tshape.uniforms.baseColor.value.x = 0;",
+				"\tshape.uniforms.baseColor.value.y = 0;",
+				"\tshape.uniforms.baseColor.value.z = 2;",
+				"\t",
 				"\tshape.uniforms.smoothness.value = progress;",
 				"\tshape.uniforms.roughness.value = invProgress;",
 				"\tshape.uniforms.normalScale.value = invProgress;",
 				"\t",
 				"\tshape.uniforms.exposureSpecular.value = progress;",
-				"",
-				"}"
-			]
-		},
-		{
-			"name": "Color",
-			"source": [
-				"const shape = resources.get( 'shape' );",
-				"",
-				"function start(){}",
-				"",
-				"function end(){}",
-				"",
-				"function update( progress ){",
-				"\t",
-				"\tshape.uniforms.baseColor.value.x = 0;",
-				"\tshape.uniforms.baseColor.value.y = 0;",
-				"\tshape.uniforms.baseColor.value.z = 2;",
-				"",
 				"\t",
 				"}"
 			]
@@ -600,40 +585,32 @@
 			"name": "",
 			"start": 0,
 			"end": 20,
-			"layer": 3,
+			"layer": 2,
 			"effectId": 8,
 			"enabled": true
 		},
 		{
 			"name": "",
 			"start": 0,
-			"end": 93.3125,
-			"layer": 5,
-			"effectId": 0,
-			"enabled": true
-		},
-		{
-			"name": "",
-			"start": 0,
-			"end": 2,
-			"layer": 6,
-			"effectId": 15,
-			"enabled": true
-		},
-		{
-			"name": "",
-			"start": 0,
-			"end": 93.32352941176474,
-			"layer": 7,
+			"end": 93.32,
+			"layer": 3,
 			"effectId": 17,
 			"enabled": true
 		},
 		{
 			"name": "",
 			"start": 0,
-			"end": 93.32,
-			"layer": 8,
-			"effectId": 18,
+			"end": 2,
+			"layer": 5,
+			"effectId": 15,
+			"enabled": true
+		},
+		{
+			"name": "",
+			"start": 0,
+			"end": 93.3125,
+			"layer": 6,
+			"effectId": 0,
 			"enabled": true
 		},
 		{
@@ -648,15 +625,15 @@
 			"name": "",
 			"start": 2,
 			"end": 87.8,
-			"layer": 6,
-			"effectId": 20,
+			"layer": 5,
+			"effectId": 19,
 			"enabled": true
 		},
 		{
 			"name": "",
 			"start": 10.873625516291883,
 			"end": 21.956048636744423,
-			"layer": 2,
+			"layer": 1,
 			"effectId": 3,
 			"enabled": true
 		},
@@ -664,7 +641,7 @@
 			"name": "",
 			"start": 20.5625,
 			"end": 22,
-			"layer": 4,
+			"layer": 2,
 			"effectId": 9,
 			"enabled": true
 		},
@@ -680,7 +657,7 @@
 			"name": "",
 			"start": 32.8949555337806,
 			"end": 43.90522361680466,
-			"layer": 2,
+			"layer": 1,
 			"effectId": 5,
 			"enabled": true
 		},
@@ -688,7 +665,7 @@
 			"name": "",
 			"start": 33.549542682926834,
 			"end": 35.862042682926834,
-			"layer": 4,
+			"layer": 2,
 			"effectId": 11,
 			"enabled": true
 		},
@@ -704,7 +681,7 @@
 			"name": "",
 			"start": 44.8125,
 			"end": 47.15625,
-			"layer": 4,
+			"layer": 2,
 			"effectId": 12,
 			"enabled": true
 		},
@@ -712,7 +689,7 @@
 			"name": "",
 			"start": 54.769329382685434,
 			"end": 65.8384155893726,
-			"layer": 2,
+			"layer": 1,
 			"effectId": 5,
 			"enabled": true
 		},
@@ -720,7 +697,7 @@
 			"name": "",
 			"start": 56.03125,
 			"end": 58.4375,
-			"layer": 4,
+			"layer": 2,
 			"effectId": 13,
 			"enabled": true
 		},
@@ -728,16 +705,16 @@
 			"name": "",
 			"start": 58.8125,
 			"end": 60.0625,
-			"layer": 3,
-			"effectId": 19,
+			"layer": 4,
+			"effectId": 18,
 			"enabled": true
 		},
 		{
 			"name": "",
 			"start": 64.28125,
 			"end": 65.53125,
-			"layer": 3,
-			"effectId": 19,
+			"layer": 4,
+			"effectId": 18,
 			"enabled": true
 		},
 		{
@@ -752,7 +729,7 @@
 			"name": "",
 			"start": 66.8125,
 			"end": 70.125,
-			"layer": 4,
+			"layer": 2,
 			"effectId": 14,
 			"enabled": true
 		},
@@ -760,7 +737,7 @@
 			"name": "",
 			"start": 76.80023880904011,
 			"end": 93.29886084431503,
-			"layer": 2,
+			"layer": 1,
 			"effectId": 7,
 			"enabled": true
 		},
@@ -768,7 +745,7 @@
 			"name": "",
 			"start": 87.8,
 			"end": 93.3125,
-			"layer": 6,
+			"layer": 5,
 			"effectId": 16,
 			"enabled": true
 		}
