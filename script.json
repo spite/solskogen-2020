@@ -556,7 +556,7 @@
 				"function update( progress ){",
 				"",
 				"\tshape.uniforms.stripeFreq.value = 9;",
-				"\tshape.uniforms.stripeColor.value.x = Math.abs( Math.sin( progress * Math.PI * 4 ) ) * 5;",
+				"\tshape.uniforms.stripeColor.value.x = Math.abs( Math.sin( progress * Math.PI * 4 ) ) * 3;",
 				"",
 				"}"
 			]
@@ -647,7 +647,7 @@
 		{
 			"name": "",
 			"start": 2,
-			"end": 87.31,
+			"end": 87.8,
 			"layer": 6,
 			"effectId": 20,
 			"enabled": true
@@ -766,7 +766,7 @@
 		},
 		{
 			"name": "",
-			"start": 87.31,
+			"start": 87.8,
 			"end": 93.3125,
 			"layer": 6,
 			"effectId": 16,
