@@ -56,10 +56,9 @@ function SidebarRender( editor ) {
 		const resources = editor.resources;
 
 		const dom = resources.get( 'dom' );
-		dom.style.width = videoWidth.getValue() + 'px';
-		dom.style.height = videoHeight.getValue() + 'px';
+		dom.style.width = ( videoWidth.getValue() / window.devicePixelRatio ) + 'px';
+		dom.style.height = ( videoHeight.getValue() / window.devicePixelRatio ) + 'px';
 
-		window.devicePixelRatio = 1; // lol
 		window.dispatchEvent( new Event( 'resize' ) ); // lol
 
 		const element = dom.firstChild;
