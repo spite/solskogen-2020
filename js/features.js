@@ -15,7 +15,7 @@ function canDoColorBufferFloat() {
 }
 
 function canDoColorBufferHalfFloat() {
-  return extensions.indexOf("EXT_color_buffer_half_float ") !== -1;
+  return extensions.indexOf("EXT_color_buffer_half_float") !== -1;
 }
 
 function log(msg) {
