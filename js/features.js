@@ -147,7 +147,7 @@ function checkContext() {
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     if (status !== gl.FRAMEBUFFER_COMPLETE) {
       log("can **NOT** render to " + glEnum(gl, format) + " texture");
-      return;
+      return false;
     }
 
     // Draw the rectangle.
