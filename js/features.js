@@ -10,6 +10,14 @@ function canDoTexLOD() {
   return extensions.indexOf("EXT_shader_texture_lod") !== -1;
 }
 
+function canDoColorBufferFloat() {
+  return extensions.indexOf("WEBGL_color_buffer_float") !== -1;
+}
+
+function canDoColorBufferHalfFloat() {
+  return extensions.indexOf("EXT_color_buffer_half_float ") !== -1;
+}
+
 function log(msg) {
   console.log(msg);
 }
@@ -196,4 +204,10 @@ function canDoHalfFloatLinear() {
   );
 }
 
-export { canDoTexLOD, canDoFloatLinear, canDoHalfFloatLinear };
+export {
+  canDoTexLOD,
+  canDoFloatLinear,
+  canDoHalfFloatLinear,
+  canDoColorBufferFloat,
+  canDoColorBufferHalfFloat,
+};
