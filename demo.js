@@ -4,6 +4,7 @@ import { Effect as IntroEffect } from "./effects/intro.js";
 import { Composer } from "./js/Composer.js";
 import * as dat from "./third_party/dat.gui.module.js";
 import * as features from "../js/features.js";
+import { settings } from "../js/settings.js";
 
 const gui = new dat.GUI();
 
@@ -158,9 +159,11 @@ function render(t) {
 }
 
 function resize() {
-  let w = window.innerWidth;
-  let h = window.innerHeight;
+  let w = window.innerWidth * settings.scale;
+  let h = window.innerHeight * settings.scale;
   renderer.setSize(w, h);
+  renderer.domElement.style.width = "100%";
+  renderer.domElement.style.height = "100%";
 
   const dPR = window.devicePixelRatio;
   w *= dPR;

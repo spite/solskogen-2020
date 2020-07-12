@@ -33,6 +33,8 @@ import { ShaderPass } from "../js/ShaderPass.js";
 import { ShaderPingPongPass } from "../js/ShaderPingPongPass.js";
 import { shader as vertexShader } from "../shaders/ortho-vs.js";
 import Maf from "../third_party/Maf.js";
+import { settings } from "../js/settings.js";
+import { canDoFloatLinear } from "../js/features.js";
 
 import { shader as geoVs } from "../shaders/sdf-geo-vs.js";
 import { shader as geoFs } from "../shaders/sdf-geo-fs.js";
@@ -207,7 +209,7 @@ class Effect extends glEffectBase {
     for (let i = 0; i < this.levels; i++) {
       const blurPass = new ShaderPingPongPass(this.renderer, blurShader, {
         format: RGBAFormat,
-        type: FloatType,
+        type: canDoFloatLinear() ? FloatType : HalfFloatType,
       });
       this.blurPasses.push(blurPass);
     }
@@ -284,7 +286,7 @@ class Effect extends glEffectBase {
 
     this.cubeRenderTarget = new WebGLCubeRenderTarget(1024, {
       format: RGBAFormat,
-      type: FloatType,
+      type: canDoFloatLinear() ? FloatType : HalfFloatType,
       generateMipmaps: true,
       minFilter: LinearMipmapLinearFilter,
     });
@@ -327,7 +329,7 @@ class Effect extends glEffectBase {
       wireframe: !true,
     });
 
-    const geometry = new IcosahedronBufferGeometry(4, 7);
+    const geometry = new IcosahedronBufferGeometry(4, settings.tessellation);
     this.mesh = new Mesh(geometry, this.geoShader);
     this.scene.add(this.mesh);
 
@@ -355,10 +357,10 @@ class Effect extends glEffectBase {
     let tw = w;
     let th = h;
     for (let i = 0; i < this.levels; i++) {
-      tw = Math.round(tw);
-      th = Math.round(th);
       tw /= 2;
       th /= 2;
+      tw = Math.round(tw);
+      th = Math.round(th);
       this.blurPasses[i].setSize(tw, th);
     }
   }
@@ -402,11 +404,11 @@ class Effect extends glEffectBase {
       blurShader.uniforms.resolution.value.set(w, h);
       blurPass.render();
       blurShader.uniforms.inputTexture.value =
-        blurPass.fbos[blurPass.currentFBO];
+        blurPass.fbos[blurPass.currentFBO].texture;
       blurShader.uniforms.direction.value.set(0, offset);
       blurPass.render();
       blurShader.uniforms.inputTexture.value =
-        blurPass.fbos[blurPass.currentFBO];
+        blurPass.fbos[blurPass.currentFBO].texture;
     }
 
     this.final.render();
