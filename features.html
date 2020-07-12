@@ -1,0 +1,13 @@
+<body></body>
+<script type="module">
+  import * as features from "./js/features.js";
+
+  const str = `
+  <p>Results:</p>
+  <p>EXT_shader_texture_lod: ${features.canDoTexLOD()}</p>
+  <p>Float linear: ${features.canDoFloatLinear()}</p>
+  <p>Half float linear: ${features.canDoFloatLinear()}</p>
+  `;
+
+  document.body.innerHTML = str;
+</script>

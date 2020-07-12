@@ -165,15 +165,17 @@ function checkContext() {
           glEnum(gl, format) +
           " texture"
       );
+      return false;
     } else {
       log("succesfully rendered to " + glEnum(gl, format) + " texture");
+      return true;
     }
   }
   if (floatTextures.float) {
-    test(gl.FLOAT);
+    floatTextures.canRenderToFloat = test(gl.FLOAT);
   }
   if (floatTextures.halfFloat) {
-    test(gl.HALF_FLOAT_OES);
+    floatTextures.canRenderToHalfFloat = test(gl.HALF_FLOAT_OES);
   }
 }
 checkContext();
