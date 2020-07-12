@@ -3,6 +3,7 @@ import { OrbitControls } from "./third_party/OrbitControls.js";
 import { Effect as IntroEffect } from "./effects/intro.js";
 import { Composer } from "./js/Composer.js";
 import * as dat from "./third_party/dat.gui.module.js";
+import * as features from "../js/features.js";
 
 const gui = new dat.GUI();
 
@@ -78,11 +79,19 @@ const canvas = document.createElement("canvas");
 document.body.append(canvas);
 const context = canvas.getContext("webgl");
 
-const renderer = new WebGLRenderer({ canvas, context, antialias: true });
+const renderer = new WebGLRenderer({
+  canvas,
+  context,
+  preserveDrawingBuffer: false,
+  antialias: false,
+  powerPreference: "high-performance",
+});
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setClearColor(0, 0);
 renderer.extensions.get("OES_standard_derivatives");
-renderer.extensions.get("EXT_shader_texture_lod");
+if (features.canDoTexLOD()) {
+  renderer.extensions.get("EXT_shader_texture_lod");
+}
 
 const composer = new Composer(renderer, 1, 1);
 

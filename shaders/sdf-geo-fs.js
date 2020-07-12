@@ -1,6 +1,20 @@
-const shader = glsl`
-#extension GL_EXT_shader_texture_lod : enable
+import * as features from "../js/features.js";
+
+const lodPolyfill = features.canDoTexLOD()
+  ? ""
+  : `
+vec4 textureCubeLodEXT(samplerCube cube, vec3 n, float bias) {
+  return textureCube(cube, n, .5 * bias);
+}
+`;
+
+const enableLodTex = features.canDoTexLOD()
+  ? `#extension GL_EXT_shader_texture_lod : enable`
+  : "";
+
+const shader = `
 #extension GL_OES_standard_derivatives : enable
+${enableLodTex}
 
 precision highp float;
 
@@ -33,6 +47,8 @@ varying vec3 vEye;
 
 varying vec3 vWorldPosition;
 varying vec3 vWorldNormal;
+
+${lodPolyfill}
 
 void main() {
 
