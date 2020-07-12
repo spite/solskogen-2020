@@ -210,4 +210,6 @@ export {
   canDoHalfFloatLinear,
   canDoColorBufferFloat,
   canDoColorBufferHalfFloat,
+  floatTextures,
+  extensions,
 };
