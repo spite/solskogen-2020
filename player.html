@@ -134,15 +134,9 @@
 
           }
 
-          // Safari: audio.play() needs to called from a user gesture
-          // so we run he first timeline frame here.
-          timeline.update(0);
-
           player.play();
 
-          prevTime = performance.now();
-
-          window.requestAnimationFrame(animate);
+          animate(prevTime = performance.now());
         });
       }
 
