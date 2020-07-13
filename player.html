@@ -130,9 +130,13 @@
 
           } else if (container.webkitRequestFullScreen) {
 
-            container.webkitRequestFullScreen(); // Safari 
+            container.webkitRequestFullScreen(); // Safari
 
           }
+
+          // Safari: audio.play() needs to called from a user gesture
+          // so we run he first timeline frame here.
+          timeline.update(0);
 
           player.play();
 
