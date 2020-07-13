@@ -124,7 +124,15 @@
         playOverlay.addEventListener("click", async () => {
           info.style.display = "none";
 
-          await container.requestFullscreen();
+          if (container.requestFullscreen) {
+
+            await container.requestFullscreen();
+
+          } else if (container.webkitRequestFullScreen) {
+
+            container.webkitRequestFullScreen(); // Safari 
+
+          }
 
           player.play();
 
