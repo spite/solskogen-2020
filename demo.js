@@ -3,8 +3,8 @@ import { OrbitControls } from "./third_party/OrbitControls.js";
 import { Effect as IntroEffect } from "./effects/intro.js";
 import { Composer } from "./js/Composer.js";
 import * as dat from "./third_party/dat.gui.module.js";
-import * as features from "../js/features.js";
-import { settings } from "../js/settings.js";
+import * as features from "./js/features.js";
+import { settings } from "./js/settings.js";
 
 const gui = new dat.GUI();
 
