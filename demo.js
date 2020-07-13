@@ -3,7 +3,7 @@ import { OrbitControls } from "./third_party/OrbitControls.js";
 import { Effect as IntroEffect } from "./effects/intro.js";
 import { Composer } from "./js/Composer.js";
 import * as dat from "./third_party/dat.gui.module.js";
-import * as features from "./js/features.js";
+import { canDoTexLOD, canDoFloatLinear } from "./js/features.js";
 import { settings } from "./js/settings.js";
 
 const gui = new dat.GUI();
@@ -90,8 +90,17 @@ const renderer = new WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setClearColor(0, 0);
 renderer.extensions.get("OES_standard_derivatives");
-if (features.canDoTexLOD()) {
+if (canDoTexLOD()) {
   renderer.extensions.get("EXT_shader_texture_lod");
+}
+if (canDoFloatLinear()) {
+  renderer.extensions.get("OES_texture_float");
+  renderer.extensions.get("OES_texture_float_linear");
+  renderer.extensions.get("WEBGL_color_buffer_float");
+} else {
+  renderer.extensions.get("OES_texture_half_float");
+  renderer.extensions.get("OES_texture_half_float_linear");
+  renderer.extensions.get("EXT_color_buffer_half_float");
 }
 
 const composer = new Composer(renderer, 1, 1);

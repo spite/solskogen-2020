@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title></title>
+    <title>OBSOLIDIAN</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -125,18 +125,14 @@
           info.style.display = "none";
 
           if (container.requestFullscreen) {
-
             await container.requestFullscreen();
-
           } else if (container.webkitRequestFullScreen) {
-
             container.webkitRequestFullScreen(); // Safari
-
           }
 
           player.play();
 
-          animate(prevTime = performance.now());
+          animate((prevTime = performance.now()));
         });
       }
 

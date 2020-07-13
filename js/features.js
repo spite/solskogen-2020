@@ -146,7 +146,7 @@ function checkContext() {
     );
     var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
     if (status !== gl.FRAMEBUFFER_COMPLETE) {
-      log("can **NOT** render to " + glEnum(gl, format) + " texture");
+      //log("can **NOT** render to " + glEnum(gl, format) + " texture");
       return false;
     }
 
@@ -168,14 +168,15 @@ function checkContext() {
     gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixel);
 
     if (pixel[0] !== 0 || pixel[1] < 248 || pixel[2] < 248 || pixel[3] < 254) {
-      log(
-        "FAIL!!!: Was not able to actually render to " +
-          glEnum(gl, format) +
-          " texture"
-      );
+      // log(
+      //   `FAIL!!!: Was not able to actually render to ${glEnum(
+      //     gl,
+      //     format
+      //   )} texture`
+      // );
       return false;
     } else {
-      log("succesfully rendered to " + glEnum(gl, format) + " texture");
+      //log("succesfully rendered to " + glEnum(gl, format) + " texture");
       return true;
     }
   }
