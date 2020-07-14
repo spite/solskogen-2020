@@ -142,7 +142,6 @@ function Timeline(editor) {
     var data = waveBuffer.getChannelData(0);
     var step = Math.ceil(factor);
     const offset = Math.round((scroller.scrollLeft * 44100) / (100 * scale));
-    console.log(scale);
     var amp = h / 2;
     for (var i = 0; i < w; i++) {
       var min = 1.0;
