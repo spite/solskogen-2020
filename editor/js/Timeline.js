@@ -278,7 +278,8 @@ function Timeline(editor) {
   timeMarkText.style.position = "absolute";
   timeMarkText.style.top = "0px";
   timeMarkText.style.background = "white";
-  timeMarkText.style.padding = "5px";
+  timeMarkText.style.padding = "2px";
+  timeMarkText.style.fontSize = "10px";
   timeMarkText.style.pointerEvents = "none";
   timeline.dom.appendChild(timeMarkText);
 
