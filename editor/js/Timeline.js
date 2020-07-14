@@ -106,7 +106,7 @@ function Timeline(editor) {
 
   const request = new XMLHttpRequest();
 
-  request.open("GET", "./assets/track.ogg", true);
+  request.open("GET", "./assets/track.mp3", true);
   request.responseType = "arraybuffer";
 
   let waveBuffer;
