@@ -19,10 +19,10 @@ function SidebarRender( editor ) {
 	var resolutionRow = new UI.Row();
 	resolutionRow.add( new UI.Text( 'Resolution' ).setWidth( '90px' ) );
 
-	var videoWidth = new UI.Integer( 768 ).setWidth( '50px' );
+	var videoWidth = new UI.Integer( 2304 ).setWidth( '50px' );
 	resolutionRow.add( videoWidth );
 
-	var videoHeight = new UI.Integer( 432 ).setWidth( '50px' );
+	var videoHeight = new UI.Integer( 1296 ).setWidth( '50px' );
 	resolutionRow.add( videoHeight );
 
 	container.add( resolutionRow );
@@ -42,7 +42,7 @@ function SidebarRender( editor ) {
 	var videoFPSRow = new UI.Row();
 	videoFPSRow.add( new UI.Text( 'Fps' ).setWidth( '90px' ) );
 
-	var videoFPS = new UI.Integer( 30 );
+	var videoFPS = new UI.Integer( 60 );
 	videoFPSRow.add( videoFPS );
 
 	container.add( videoFPSRow );
@@ -91,11 +91,11 @@ function SidebarRender( editor ) {
 
 		if ( audio !== null ) {
 
-			await ffmpeg.run( `-framerate ${fps} -pattern_type glob -i *.png -i audio.mp3 -c:a aac -shortest -c:v libx264 -pix_fmt yuv420p -preset slow -crf 8 out.mp4`, { output: 'out.mp4' });
+			await ffmpeg.run( `-framerate ${fps} -pattern_type glob -i *.png -i audio.mp3 -c:a aac -shortest -c:v libx264 -pix_fmt yuv420p -preset slow -crf 0 out.mp4`, { output: 'out.mp4' });
 
 		} else {
 
-			await ffmpeg.run( `-framerate ${fps} -pattern_type glob -i *.png -c:v libx264 -pix_fmt yuv420p -preset slow -crf 8 out.mp4`, { output: 'out.mp4' });
+			await ffmpeg.run( `-framerate ${fps} -pattern_type glob -i *.png -c:v libx264 -pix_fmt yuv420p -preset slow -crf 0 out.mp4`, { output: 'out.mp4' });
 
 		}
 
