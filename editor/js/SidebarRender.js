@@ -56,10 +56,11 @@ function SidebarRender( editor ) {
 		const resources = editor.resources;
 
 		const dom = resources.get( 'dom' );
-		dom.style.width = ( videoWidth.getValue() / window.devicePixelRatio ) + 'px';
-		dom.style.height = ( videoHeight.getValue() / window.devicePixelRatio ) + 'px';
 
-		window.dispatchEvent( new Event( 'resize' ) ); // lol
+		// Don't try this at home!
+		window.innerWidth = videoWidth.getValue() / window.devicePixelRatio;
+		window.innerHeight = videoHeight.getValue() / window.devicePixelRatio;
+		window.dispatchEvent( new Event( 'resize' ) );
 
 		const element = dom.firstChild;
 		const audio = player.getAudio();
