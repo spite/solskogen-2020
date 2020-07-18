@@ -102,7 +102,7 @@ void main() {
   bloom += lerpBloomFactor(.4) * texture2D( blur3Tex, vUv );
   bloom += lerpBloomFactor(.2) * texture2D( blur4Tex, vUv );
 
-  gl_FragColor =screen(c,bloom, exposure);// screen(clamp(c, vec4(0.), vec4(1.)), clamp(bloom, vec4(0.), vec4(1.)), exposure);
+  gl_FragColor = screen(clamp(c, vec4(0.), vec4(1.)), clamp(bloom, vec4(0.), vec4(1.)), exposure);
 }
 `;
 
