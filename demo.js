@@ -78,17 +78,17 @@ postFolder.open();
 
 const canvas = document.createElement("canvas");
 document.body.append(canvas);
-const context = canvas.getContext("webgl");
-
-const renderer = new WebGLRenderer({
-  canvas,
-  context,
-  preserveDrawingBuffer: false,
+const contextAttributes = {
+  alpha: true,
   antialias: false,
   powerPreference: "high-performance",
-});
+  preserveDrawingBuffer: false
+};
+const context = canvas.getContext("webgl", contextAttributes);
+
+const renderer = new WebGLRenderer({canvas, context});
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0, 0);
+renderer.setClearColor(0, 1);
 renderer.extensions.get("OES_standard_derivatives");
 if (canDoTexLOD()) {
   renderer.extensions.get("EXT_shader_texture_lod");
