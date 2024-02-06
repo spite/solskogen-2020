@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <style>
       html {
@@ -126,12 +126,16 @@
           playOverlay.style.display = "none";
 
           if (container.requestFullscreen) {
-            await container.requestFullscreen();
-          } else if (container.webkitRequestFullScreen) {
-            container.webkitRequestFullScreen(); // Safari
+            await container.requestFullscreen({navigationUI:"hide"});
           }
 
           player.play();
+
+          if (navigator.wakeLock) {
+            try {
+              await navigator.wakeLock.request("screen");
+            } catch (err) {}
+          }
 
           animate((prevTime = performance.now()));
         });
